@@ -74,7 +74,7 @@ export const HomePage: FC<HomePageProps> = ({ onNavigate, onSelectProject }) => 
           <a className="welcome-hero__learn" href="#como-apoyar">Primero, descubre cómo funciona <ChevronDown size={15} aria-hidden="true" /></a>
         </div>
         <div className="welcome-cover">
-          <ProjectArtwork category={featured?.category} birds={Boolean(featured && /loro|aves|refugio/i.test(`${featured.title} ${featured.solution}`))} />
+          <ProjectArtwork category={featured?.category} birds={true} />
           <div className="welcome-cover__story">
             {catalog.isLoading ? <p role="status">Buscando una historia para compartir…</p> : catalog.error ? <div role="alert"><p>No pudimos cargar la iniciativa.</p><button type="button" className="welcome-link" onClick={catalog.refresh}>Volver a intentar</button></div> : featured ? <>
               <div className="welcome-cover__context"><span>{categoryLabels[featured.category] ?? featured.category}</span><span>{isClosed(featured, now) ? 'Campaña cerrada' : 'Proyecto publicado'}</span></div>
