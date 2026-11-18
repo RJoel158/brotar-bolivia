@@ -1,351 +1,124 @@
-import type { FC } from 'react';
-import { useEffect, useState } from 'react';
-import { ArrowRight, BadgeCheck, ChevronDown, Star } from 'lucide-react';
-import { calculateDaysRemaining, formatCurrency, formatPercentage } from '../../../shared/index.ts';
-import { campaignsApi, type CampaignResponse } from '../../../shared/api/campaignsApi.ts';
+import type { FC, KeyboardEvent, MouseEvent } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowUpRight, Check, CheckCheck, ChevronDown, ChevronLeft, ChevronRight, FileText, Heart, Leaf, MapPin, MessageCircle, ShieldCheck, Sprout } from 'lucide-react';
+import type { CampaignResponse } from '../../../shared/api/campaignsApi.ts';
 import { useCampaignCatalog } from '../../../shared/hooks/useCampaignCatalog.ts';
-import { getApiErrorMessage } from '../../auth/utils/getApiErrorMessage.ts';
-import {
-  categoryLabels,
-  heroContent,
-  impactStats,
-  PROJECTS_PAGE_SIZE,
-  purposeCards,
-  purposeContent,
-} from './homeContent.ts';
+import { audienceContent, categoryLabels, frequentlyAsked, journeySteps } from './homeContent.ts';
+import { ProjectArtwork } from './ProjectArtwork.tsx';
 import './HomePage.css';
 
 export interface HomePageProps {
   onNavigate?: (route: string) => void;
   onSelectProject?: (projectId: string) => void;
 }
-
-const ALL_CATEGORIES = 'all';
-
-/**
- * El layout publico centra el contenido en 1200px (.brotar-main-content), asi que
- * las bandas a sangre completa se sacan con margenes negativos. Usamos el ancho real
- * del viewport (sin la barra de scroll) en vez de 100vw para no provocar desborde
- * horizontal, que rompia el header sticky.
- */
-function useViewportWidthVariable(): void {
-  useEffect(() => {
-    const sync = () => {
-      document.documentElement.style.setProperty(
-        '--brotar-viewport-width',
-        `${document.documentElement.clientWidth}px`,
-      );
-    };
-    sync();
-    window.addEventListener('resize', sync);
-    return () => window.removeEventListener('resize', sync);
-  }, []);
-}
+type Audience = keyof typeof audienceContent;
+const money = (amount: number, currency = 'BOB') => new Intl.NumberFormat('es-BO', { style: 'currency', currency, maximumFractionDigits: 2 }).format(amount);
+const isClosed = (campaign: CampaignResponse, now: number) => Boolean(campaign.endDate && new Date(campaign.endDate).getTime() <= now);
+const hasStory = (campaign: CampaignResponse) => (campaign.problem?.trim().length ?? 0) >= 40 && (campaign.solution?.trim().length ?? 0) >= 40;
 
 export const HomePage: FC<HomePageProps> = ({ onNavigate, onSelectProject }) => {
-  const [summary, setSummary] = useState<Awaited<ReturnType<typeof campaignsApi.home>> | null>(null);
-  const [summaryError, setSummaryError] = useState<string | null>(null);
-  const [summaryLoading, setSummaryLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState<string>(ALL_CATEGORIES);
-  const [visibleCount, setVisibleCount] = useState(PROJECTS_PAGE_SIZE);
-  const catalog = useCampaignCatalog(activeCategory === ALL_CATEGORIES ? undefined : activeCategory);
-  const campaigns = catalog.items;
-  const isLoading = summaryLoading || catalog.isLoading;
-  const error = summaryError || catalog.error;
-  const featured = summary?.featured ?? null;
-  const availableCategories = summary?.categories ?? [];
-  const gridCampaigns = campaigns.filter(c => c.id !== featured?.id);
-  const visibleCampaigns = gridCampaigns.slice(0, visibleCount);
-  const totalFiltered = activeCategory === ALL_CATEGORIES ? Math.max(0, (summary?.projects ?? 0) - (featured ? 1 : 0)) : (summary?.categoryCounts[activeCategory] ?? 0);
-  const hasMore = visibleCount < gridCampaigns.length || Boolean(catalog.nextCursor);
+  const catalog = useCampaignCatalog();
+  const previewRef = useRef<HTMLDivElement>(null);
+  const [audience, setAudience] = useState<Audience>('supporter');
+  const [journeyStep, setJourneyStep] = useState(0);
+  const [exampleAmount, setExampleAmount] = useState(50);
+  const [now, setNow] = useState(() => Date.now());
+  const [storyView, setStoryView] = useState<'problem' | 'solution'>('problem');
+  // Prefer a complete, still-open story. Do not feature a random picture as evidence.
+  const stories = catalog.items.filter(hasStory).sort((a, b) => Number(isClosed(a, now)) - Number(isClosed(b, now)));
+  const featured = stories.find(campaign => !isClosed(campaign, now)) ?? stories[0] ?? null;
+  const selectedProjects = stories.filter(campaign => campaign.id !== featured?.id).slice(0, 2);
+  const audienceInfo = audienceContent[audience];
+  const exampleFee = Math.round(exampleAmount * 5) / 100;
 
-  useViewportWidthVariable();
   useEffect(() => {
-    const controller = new AbortController();
-    void campaignsApi.home(controller.signal).then(data => {
-      if (!controller.signal.aborted) setSummary(data);
-    }).catch(err => {
-      if (!controller.signal.aborted) setSummaryError(getApiErrorMessage(err, 'No se pudieron cargar los proyectos.'));
-    }).finally(() => { if (!controller.signal.aborted) setSummaryLoading(false); });
-    return () => controller.abort();
+    const interval = window.setInterval(() => setNow(Date.now()), 60000);
+    return () => window.clearInterval(interval);
   }, []);
 
-  const selectCategory = (category: string) => {
-    setActiveCategory(category);
-    setVisibleCount(PROJECTS_PAGE_SIZE);
+  const navigate = (event: MouseEvent<HTMLAnchorElement>, route: string) => {
+    if (!onNavigate || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault(); onNavigate(route);
   };
-  const showMore = async () => {
-    if (visibleCount >= gridCampaigns.length && catalog.nextCursor) await catalog.loadMore();
-    setVisibleCount(count => count + PROJECTS_PAGE_SIZE);
+  const openProject = (event: MouseEvent<HTMLAnchorElement>, id: string) => {
+    if (!onSelectProject || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault(); onSelectProject(id);
   };
-
-  const renderDaysRemaining = (campaign: CampaignResponse) => {
-    if (!campaign.endDate) return 'Sin fecha límite';
-    const days = calculateDaysRemaining(campaign.endDate);
-    return days === 0 ? 'Último día' : `${days} días restantes`;
+  const moveToStep = (step: number) => {
+    setJourneyStep(step);
+    window.requestAnimationFrame(() => {
+      previewRef.current?.focus({ preventScroll: true });
+      if (window.matchMedia('(max-width: 768px)').matches) {
+        previewRef.current?.scrollIntoView({ block: 'start', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      }
+    });
   };
-
-  /** Banda de impacto: datos reales de las campañas publicadas. */
-  const impactValues = {
-    projects: String(summary?.projects ?? 0),
-    raised: formatCurrency(Number(summary?.raised ?? 0), summary?.currency || 'BOB'),
-    progress: `${summary?.progress ?? 0}%`,
+  const handleAudienceKeys = (event: KeyboardEvent<HTMLButtonElement>) => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    const next = event.key === 'Home' ? 'supporter' : event.key === 'End' ? 'creator' : audience === 'supporter' ? 'creator' : 'supporter';
+    setAudience(next);
+    event.currentTarget.parentElement?.querySelector<HTMLButtonElement>(`#path-${next}`)?.focus();
   };
 
   return (
-    <div className="brotar-landing">
-      <section className="brotar-landing__bleed brotar-hero">
-        <div className="brotar-hero__overlay" />
-        <div className="brotar-landing__inner brotar-hero__content">
-          <span className="brotar-hero__badge">
-            <BadgeCheck size={14} aria-hidden="true" />
-            {heroContent.badge}
-          </span>
-          <h1 className="brotar-hero__title">{heroContent.title}</h1>
-          <p className="brotar-hero__description">{heroContent.description}</p>
-          <div className="brotar-hero__actions">
-            <button
-              type="button"
-              className="brotar-landing__btn brotar-landing__btn--primary"
-              onClick={() => onNavigate?.('explore-projects')}
-            >
-              {heroContent.primaryAction}
-              <ArrowRight size={16} aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              className="brotar-landing__btn brotar-landing__btn--ghost"
-              onClick={() => onNavigate?.('how-it-works')}
-            >
-              {heroContent.secondaryAction}
-            </button>
+    <div className="brotar-welcome">
+      <section className="welcome-hero" aria-labelledby="welcome-title">
+        <div className="welcome-hero__copy">
+          <h1 id="welcome-title"><span className="welcome-hero__statement">Tu comunidad tiene ideas.</span><span className="welcome-hero__response">Tú puedes impulsarlas.</span></h1>
+          <p>Un refugio, una biblioteca, un espacio para crear. Conoce los proyectos de Brotar y encuentra tu forma de participar.</p>
+          <div className="welcome-actions">
+            <a className="welcome-button" href="#tu-camino" onClick={() => setAudience('supporter')}>Quiero apoyar <Heart size={17} aria-hidden="true" /></a>
+            <a className="welcome-button welcome-button--outline" href="#tu-camino" onClick={() => setAudience('creator')}>Tengo un proyecto <Sprout size={18} aria-hidden="true" /></a>
+          </div>
+          <a className="welcome-hero__learn" href="#como-apoyar">Primero, descubre cómo funciona <ChevronDown size={15} aria-hidden="true" /></a>
+        </div>
+        <div className="welcome-cover">
+          <ProjectArtwork category={featured?.category} birds={Boolean(featured && /loro|aves|refugio/i.test(`${featured.title} ${featured.solution}`))} />
+          <div className="welcome-cover__story">
+            {catalog.isLoading ? <p role="status">Buscando una historia para compartir…</p> : catalog.error ? <div role="alert"><p>No pudimos cargar la iniciativa.</p><button type="button" className="welcome-link" onClick={catalog.refresh}>Volver a intentar</button></div> : featured ? <>
+              <div className="welcome-cover__context"><span>{categoryLabels[featured.category] ?? featured.category}</span><span>{isClosed(featured, now) ? 'Campaña cerrada' : 'Proyecto publicado'}</span></div>
+              <h2><a href={`/proyectos/${featured.id}`} onClick={event => openProject(event, featured.id)}>{featured.title}</a></h2>
+              <p>{featured.shortSummary || featured.problem}</p>
+              <a className="welcome-link" href="#su-historia">Conoce su historia <ArrowUpRight size={17} aria-hidden="true" /></a>
+            </> : <><h2>La próxima historia puede ser la tuya.</h2><p>Conoce los pasos para preparar una campaña en Brotar.</p><a className="welcome-link" href="/para-creadores" onClick={event => navigate(event, 'for-creators')}>Cómo crear un proyecto</a></>}
           </div>
         </div>
       </section>
 
-      <section className="brotar-landing__bleed brotar-impact">
-        <div className="brotar-landing__inner brotar-impact__grid">
-          {impactStats.map((stat) => {
-            const Icon = stat.icon;
-            return (
-              <div className="brotar-impact__item" key={stat.id}>
-                <span className="brotar-impact__icon">
-                  <Icon size={18} aria-hidden="true" />
-                </span>
-                <div>
-                  <p className="brotar-impact__value">
-                    {isLoading || error ? '—' : impactValues[stat.id]}
-                  </p>
-                  <p className="brotar-impact__label">{stat.label}</p>
-                </div>
-              </div>
-            );
-          })}
+      {featured ? <section className="welcome-story" id="su-historia" aria-labelledby="story-title">
+        <div className="welcome-story__intro"><span className="welcome-caption"><Leaf size={16} aria-hidden="true" /> Una iniciativa, de cerca</span><h2 id="story-title">¿Qué quieren cambiar?</h2>{featured.location ? <p className="welcome-location"><MapPin size={15} aria-hidden="true" />{featured.location}</p> : null}<p className="welcome-story__source">La historia, según la información publicada por su equipo.</p></div>
+        <div className="welcome-story__detail">
+          <div className="welcome-story__switch" role="group" aria-label="Conocer el contexto del proyecto"><button type="button" aria-pressed={storyView === 'problem'} onClick={() => setStoryView('problem')}>La necesidad</button><button type="button" aria-pressed={storyView === 'solution'} onClick={() => setStoryView('solution')}>La propuesta</button></div>
+          <p className="welcome-story__quote" aria-live="polite"><span className="welcome-text-change" key={storyView}>{storyView === 'problem' ? featured.problem : featured.solution}</span></p>
+          <div className="welcome-story__bottom"><div><span>Meta de la campaña</span><strong>{money(featured.goalAmount, featured.currency)}</strong></div><a className="welcome-link" href={`/proyectos/${featured.id}`} onClick={event => openProject(event, featured.id)}>Ver plan y detalles <ArrowUpRight size={17} aria-hidden="true" /></a></div>
+        </div>
+      </section> : null}
+
+      <section className="welcome-path" id="tu-camino" aria-labelledby="path-title">
+        <div className="welcome-section-intro"><h2 id="path-title">¿Dónde entras tú?</h2><p>Apoyar una iniciativa o preparar la tuya. Elige por dónde empezar.</p></div>
+        <div className="welcome-path__tabs" role="tablist" aria-label="Cómo quieres participar">{(['supporter', 'creator'] as const).map(value => <button key={value} id={`path-${value}`} type="button" role="tab" aria-selected={audience === value} aria-controls="path-panel" tabIndex={audience === value ? 0 : -1} onClick={() => setAudience(value)} onKeyDown={handleAudienceKeys}>{value === 'supporter' ? <Heart size={20} aria-hidden="true" /> : <Sprout size={22} aria-hidden="true" />}{value === 'supporter' ? 'Quiero apoyar' : 'Tengo un proyecto'}</button>)}</div>
+        <div key={audience} id="path-panel" role="tabpanel" aria-labelledby={`path-${audience}`} tabIndex={0} className={`welcome-path__panel welcome-path__panel--${audience}`}>
+          <div><h3>{audienceInfo.heading}</h3><p>{audienceInfo.description}</p></div>
+          <div><ol>{audienceInfo.steps.map((step, index) => <li key={step}><span aria-hidden="true">{index + 1}</span>{step}</li>)}</ol><a className="welcome-button" href={audienceInfo.href} onClick={event => navigate(event, audienceInfo.route)}>{audienceInfo.action}<ArrowUpRight size={17} aria-hidden="true" /></a><p className="welcome-path__note">{audienceInfo.note}</p></div>
         </div>
       </section>
 
-      <section className="brotar-purpose">
-        <p className="brotar-purpose__eyebrow">{purposeContent.eyebrow}</p>
-        <h2 className="brotar-purpose__title">{purposeContent.title}</h2>
-        <p className="brotar-purpose__description">{purposeContent.description}</p>
-        <div className="brotar-purpose__grid">
-          {purposeCards.map((card) => {
-            const Icon = card.icon;
-            return (
-              <article className="brotar-purpose__card" key={card.id}>
-                <span className="brotar-purpose__card-icon">
-                  <Icon size={20} aria-hidden="true" />
-                </span>
-                <h3 className="brotar-purpose__card-title">{card.title}</h3>
-                <p className="brotar-purpose__card-text">{card.description}</p>
-              </article>
-            );
-          })}
+      <section className="welcome-journey" id="como-apoyar" aria-labelledby="journey-title">
+        <div className="welcome-journey__instructions"><h2 id="journey-title">Pruébalo antes de decidir.</h2><p>Explora cómo se apoya una iniciativa. Aquí no se crea un aporte ni se realiza ningún cobro.</p><ol className="welcome-journey__steps">{journeySteps.map((label, index) => <li key={label}><button type="button" aria-current={journeyStep === index ? 'step' : undefined} aria-controls="journey-preview" onClick={() => moveToStep(index)}><span>{index < journeyStep ? <Check size={16} aria-hidden="true" /> : index + 1}</span><span>{label}</span><ChevronRight size={17} aria-hidden="true" /></button></li>)}</ol></div>
+        <div className="welcome-preview" id="journey-preview" ref={previewRef} role="region" tabIndex={-1} aria-label={`Paso ${journeyStep + 1}: ${journeySteps[journeyStep]}`}>
+          <div className="welcome-preview__label"><span>Recorrido de ejemplo</span><span>{journeyStep + 1} de 3</span></div>
+          {journeyStep === 0 ? <div key={journeyStep} className="welcome-preview__content"><FileText size={30} aria-hidden="true" /><h3>Primero, entiende la idea.</h3><p>{featured?.shortSummary || 'Abre una campaña y conoce qué quiere hacer su equipo.'}</p><ul><li><CheckCheck size={17} aria-hidden="true" />Quién impulsa el proyecto</li><li><CheckCheck size={17} aria-hidden="true" />Cómo se usará el presupuesto</li><li><CheckCheck size={17} aria-hidden="true" />Plazo y modelo de financiamiento</li></ul><p className="welcome-preview__footnote">No te quedes solo con la portada. Lee el plan completo.</p></div> : journeyStep === 1 ? <div key={journeyStep} className="welcome-preview__content"><h3>Un aporte, con las cuentas claras.</h3><label className="welcome-amount-label" htmlFor="example-amount">Aporte de ejemplo <output htmlFor="example-amount">{money(exampleAmount)}</output></label><input id="example-amount" type="range" min="10" max="500" step="10" value={exampleAmount} onChange={event => setExampleAmount(Number(event.target.value))} /><div className="welcome-presets" role="group" aria-label="Montos de ejemplo">{[50, 100, 200].map(amount => <button key={amount} type="button" aria-pressed={exampleAmount === amount} onClick={() => setExampleAmount(amount)}>{money(amount)}</button>)}</div><dl className="welcome-breakdown"><div><dt>Comisión Brotar (5%)</dt><dd>{money(exampleFee)}</dd></div><div><dt>Para el proyecto</dt><dd>{money(exampleAmount - exampleFee)}</dd></div></dl><p className="welcome-preview__footnote">Cálculo ilustrativo en bolivianos. En esta versión los pagos son simulados.</p></div> : <div key={journeyStep} className="welcome-preview__content"><MessageCircle size={30} aria-hidden="true" /><h3>La historia continúa.</h3><p>Consulta las actualizaciones que publique el equipo y vuelve a revisar el plan de trabajo.</p><ul><li><CheckCheck size={17} aria-hidden="true" />Publicaciones y avances del proyecto</li><li><CheckCheck size={17} aria-hidden="true" />Estado de tu aporte en tu cuenta</li><li><CheckCheck size={17} aria-hidden="true" />Condiciones de las recompensas, si existen</li></ul><p className="welcome-preview__footnote">La frecuencia y el contenido de los avances dependen de cada equipo.</p></div>}
+          <div className="welcome-preview__controls"><button type="button" disabled={journeyStep === 0} onClick={() => moveToStep(Math.max(0, journeyStep - 1))} aria-label="Paso anterior"><ChevronLeft size={17} aria-hidden="true" />Anterior</button>{journeyStep < 2 ? <button type="button" onClick={() => moveToStep(Math.min(2, journeyStep + 1))}>Siguiente<ChevronRight size={17} aria-hidden="true" /></button> : <a href="/explorar/campanas" onClick={event => navigate(event, 'explore-catalog')}>Explorar proyectos<ArrowUpRight size={17} aria-hidden="true" /></a>}</div>
         </div>
       </section>
 
-      {error ? (
-        <p className="brotar-landing__message" role="alert">
-          {error}
-        </p>
-      ) : null}
+      <section className="welcome-trust" aria-labelledby="trust-title"><div className="welcome-section-intro"><h2 id="trust-title">Qué revisamos. Qué decides tú.</h2><p>Antes de decidir, conoce qué revisa la plataforma y qué debes revisar tú.</p></div><div className="welcome-trust__columns"><div><ShieldCheck size={26} aria-hidden="true" /><h3>Lo que revisa Brotar</h3><p>La identidad del creador y la información de la campaña forman parte del proceso de revisión.</p><a className="welcome-link" href="/verificacion" onClick={event => navigate(event, 'verification')}>Conocer el proceso<ArrowUpRight size={16} aria-hidden="true" /></a></div><div><FileText size={26} aria-hidden="true" /><h3>Lo que eliges tú</h3><p>Revisa objetivos, presupuesto, plazo y condiciones. Una revisión no garantiza los resultados del proyecto.</p><a className="welcome-link" href="/preguntas-frecuentes" onClick={event => navigate(event, 'faq')}>Resolver mis dudas<ArrowUpRight size={16} aria-hidden="true" /></a></div></div></section>
 
-      {isLoading ? (
-        <p className="brotar-landing__message">Cargando proyectos publicados…</p>
-      ) : null}
+      {selectedProjects.length ? <section className="welcome-selection" aria-labelledby="selection-title"><div className="welcome-selection__heading"><h2 id="selection-title">Más historias de Brotar.</h2><a className="welcome-link" href="/explorar/campanas" onClick={event => navigate(event, 'explore-catalog')}>Ver todos los proyectos<ArrowUpRight size={17} aria-hidden="true" /></a></div><div className="welcome-selection__list">{selectedProjects.map(campaign => <article className="welcome-small-story" key={campaign.id}><a className="welcome-small-story__art" href={`/proyectos/${campaign.id}`} onClick={event => openProject(event, campaign.id)} aria-label={`Conocer ${campaign.title}`}><ProjectArtwork category={campaign.category} /></a><div><span className="welcome-caption">{categoryLabels[campaign.category] ?? campaign.category}{isClosed(campaign, now) ? ' / Campaña cerrada' : ''}</span><h3><a href={`/proyectos/${campaign.id}`} onClick={event => openProject(event, campaign.id)}>{campaign.title}</a></h3><p>{campaign.problem || campaign.shortSummary}</p><a className="welcome-link" href={`/proyectos/${campaign.id}`} onClick={event => openProject(event, campaign.id)}>Conocer la propuesta<ArrowUpRight size={16} aria-hidden="true" /></a></div></article>)}</div></section> : null}
 
-      {!isLoading && !error && summary?.projects === 0 ? (
-        <p className="brotar-landing__message">
-          Todavía no hay proyectos publicados. Vuelve pronto.
-        </p>
-      ) : null}
-
-      {featured ? (
-        <section className="brotar-featured">
-          <h2 className="brotar-section-title">Proyecto Destacado</h2>
-          <article className="brotar-featured__card">
-            <div className="brotar-featured__media">
-              {featured.coverImageUrl ? (
-                <img src={featured.coverImageUrl} alt="" loading="lazy" />
-              ) : (
-                <div className="brotar-featured__media-fallback" aria-hidden="true" />
-              )}
-            </div>
-            <div className="brotar-featured__body">
-              <p className="brotar-featured__eyebrow">
-                {categoryLabels[featured.category] ?? featured.category}
-                {featured.location ? ` · ${featured.location}` : ''}
-              </p>
-              <h3 className="brotar-featured__title">{featured.title}</h3>
-              <p className="brotar-featured__summary">
-                {featured.shortSummary ?? 'Campaña publicada en Brotar.'}
-              </p>
-
-              <div className="brotar-progress">
-                <div className="brotar-progress__track">
-                  <div
-                    className="brotar-progress__fill"
-                    style={{
-                      width: `${formatPercentage(featured.currentAmount, featured.goalAmount)}%`,
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="brotar-featured__metrics">
-                <div>
-                  <p className="brotar-featured__amount">
-                    {formatCurrency(featured.currentAmount, featured.currency || 'BOB')}
-                  </p>
-                  <p className="brotar-featured__amount-label">
-                    de meta de {formatCurrency(featured.goalAmount, featured.currency || 'BOB')}
-                  </p>
-                </div>
-                <div className="brotar-featured__metrics-right">
-                  <p className="brotar-featured__percentage">
-                    {formatPercentage(featured.currentAmount, featured.goalAmount)}%
-                  </p>
-                  <p className="brotar-featured__amount-label">{renderDaysRemaining(featured)}</p>
-                </div>
-              </div>
-
-              <div className="brotar-featured__footer">
-                <span className="brotar-featured__backers">
-                  <Star size={14} aria-hidden="true" />
-                  {categoryLabels[featured.category] ?? featured.category} ·{' '}
-                  {featured.fundingModel === 'all_or_nothing' ? 'Todo o nada' : 'Financiación flexible'}
-                </span>
-                <button
-                  type="button"
-                  className="brotar-landing__btn brotar-landing__btn--dark"
-                  onClick={() => onSelectProject?.(featured.id)}
-                >
-                  Apoyar ahora
-                </button>
-              </div>
-            </div>
-          </article>
-        </section>
-      ) : null}
-
-      {summary && summary.projects > (featured ? 1 : 0) ? (
-        <section className="brotar-projects">
-          <header className="brotar-projects__header">
-            <h2 className="brotar-section-title">Proyectos Activos</h2>
-            <div className="brotar-projects__filters">
-              <button
-                type="button"
-                className={`brotar-chip ${activeCategory === ALL_CATEGORIES ? 'is-active' : ''}`}
-                onClick={() => selectCategory(ALL_CATEGORIES)}
-              >
-                Todos los proyectos
-              </button>
-              {availableCategories.map((category) => (
-                <button
-                  type="button"
-                  key={category}
-                  className={`brotar-chip ${activeCategory === category ? 'is-active' : ''}`}
-                  onClick={() => selectCategory(category)}
-                >
-                  {categoryLabels[category] ?? category}
-                </button>
-              ))}
-            </div>
-          </header>
-
-          <p className="brotar-projects__count">
-            {totalFiltered}{' '}
-            {totalFiltered === 1 ? 'campaña activa' : 'campañas activas'}
-          </p>
-
-          <div className="brotar-projects__grid">
-            {visibleCampaigns.map((campaign) => {
-              const percentage = formatPercentage(campaign.currentAmount, campaign.goalAmount);
-              return (
-                <article className="brotar-project-card" key={campaign.id}>
-                  <div className="brotar-project-card__media">
-                    {campaign.coverImageUrl ? (
-                      <img src={campaign.coverImageUrl} alt="" loading="lazy" />
-                    ) : (
-                      <div className="brotar-project-card__media-fallback" aria-hidden="true" />
-                    )}
-                    <span className="brotar-project-card__badge">
-                      {categoryLabels[campaign.category] ?? campaign.category}
-                    </span>
-                  </div>
-                  <div className="brotar-project-card__body">
-                    <h3 className="brotar-project-card__title">{campaign.title}</h3>
-                    <p className="brotar-project-card__summary">
-                      {campaign.shortSummary ?? 'Campaña publicada en Brotar.'}
-                    </p>
-
-                    <div className="brotar-progress">
-                      <div className="brotar-progress__track">
-                        <div className="brotar-progress__fill" style={{ width: `${percentage}%` }} />
-                      </div>
-                    </div>
-
-                    <div className="brotar-project-card__metrics">
-                      <span className="brotar-project-card__amount">
-                        <strong>
-                          {formatCurrency(campaign.currentAmount, campaign.currency || 'BOB')}
-                        </strong>{' '}
-                        recaudados
-                      </span>
-                      <span className="brotar-project-card__percentage">{percentage}%</span>
-                    </div>
-
-                    <footer className="brotar-project-card__footer">
-                      <span>{renderDaysRemaining(campaign)}</span>
-                      <button
-                        type="button"
-                        className="brotar-project-card__link"
-                        onClick={() => onSelectProject?.(campaign.id)}
-                      >
-                        Ver detalles
-                        <ArrowRight size={14} aria-hidden="true" />
-                      </button>
-                    </footer>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-
-          {catalog.loadMoreError ? <div role="alert"><p>{catalog.loadMoreError}</p><button type="button" onClick={catalog.refresh}>Actualizar proyectos</button></div> : null}
-          {hasMore ? (
-            <button
-              type="button"
-              className="brotar-projects__more"
-              disabled={catalog.isLoadingMore}
-              onClick={() => void showMore()}
-            >
-              Cargar más proyectos
-              <ChevronDown size={16} aria-hidden="true" />
-            </button>
-          ) : null}
-        </section>
-      ) : null}
+      <section className="welcome-faq" aria-labelledby="faq-title"><h2 id="faq-title">¿Todavía tienes dudas?</h2><div>{frequentlyAsked.map(item => <details key={item.question}><summary>{item.question}<ChevronDown size={18} aria-hidden="true" /></summary><p>{item.answer}</p></details>)}</div></section>
+      <section className="welcome-closing"><Sprout size={32} aria-hidden="true" /><h2>Elige una idea.<br />O comparte la tuya.</h2><div className="welcome-actions"><a className="welcome-button" href="/explorar/campanas" onClick={event => navigate(event, 'explore-catalog')}>Encontrar un proyecto</a><a className="welcome-button welcome-button--outline" href="/para-creadores" onClick={event => navigate(event, 'for-creators')}>Empezar el mío</a></div><p>Brotar está en demostración. Los pagos son simulados, sin cobros reales.</p></section>
     </div>
   );
 };
