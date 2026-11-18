@@ -1,0 +1,90 @@
+.creator-verify {
+  --creator-ink: #0e4b34;
+  --creator-green: #17913f;
+  --creator-line: #dce5df;
+  --creator-muted: #5b6b63;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 2.5rem;
+}
+
+.creator-verify__header {
+  margin-bottom: 1.5rem;
+}
+
+.creator-verify__eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--creator-green);
+}
+
+.creator-verify__title {
+  margin: 0;
+  font-size: clamp(1.55rem, 2.3vw, 1.9rem);
+  font-weight: 700;
+  color: var(--creator-ink);
+  letter-spacing: -0.02em;
+}
+
+.creator-verify__subtitle {
+  margin: 0.45rem 0 0;
+  max-width: 40rem;
+  color: var(--creator-muted);
+  font-size: 0.96rem;
+  line-height: 1.45;
+}
+
+.creator-verify__return {
+  margin-top: 1rem;
+}
+
+.creator-verify__card {
+  background: #ffffff;
+  border: 1px solid var(--creator-line);
+  border-radius: 10px;
+  padding: 1.15rem 1.2rem 1.3rem;
+  margin-bottom: 1.25rem;
+}
+
+.creator-verify__card-title {
+  margin: 0 0 0.9rem;
+  font-size: 1rem;
+  font-weight: 650;
+  color: var(--creator-ink);
+}
+
+.creator-verify__facts {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem 1.25rem;
+}
+
+.creator-verify__facts dt {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--creator-muted);
+}
+
+.creator-verify__facts dd {
+  margin: 0.2rem 0 0;
+  color: var(--creator-ink);
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+
+.creator-verify__banner {
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 640px) {
+  .creator-verify__facts {
+    grid-template-columns: 1fr;
+  }
+}

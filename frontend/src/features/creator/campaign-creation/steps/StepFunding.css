@@ -1,0 +1,117 @@
+.step-funding {
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.step-funding__layout {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.step-funding__content {
+  flex: 1;
+  min-width: 0;
+  max-width: 560px;
+}
+
+.step-funding__header {
+  margin-bottom: 20px;
+}
+
+.step-funding__header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--brotar-text);
+  margin-bottom: 6px;
+}
+
+.step-funding__header p {
+  font-size: 0.9rem;
+  color: var(--brotar-text-secondary);
+}
+
+.step-funding__form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.step-funding__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.step-funding__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--brotar-text);
+}
+
+.step-funding__options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.step-funding__actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--brotar-border);
+}
+
+.step-funding__actions-right {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.step-funding__ready {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--brotar-text-secondary);
+}
+
+.step-funding__error {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: var(--brotar-error);
+}
+
+.step-funding__success {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: var(--brotar-green-institutional);
+}
+
+@media (max-width: 800px) {
+  .step-funding__layout {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .step-funding__content {
+    max-width: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .step-funding__actions {
+    flex-direction: column-reverse;
+  }
+
+  .step-funding__actions-right {
+    width: 100%;
+    flex-direction: column-reverse;
+  }
+
+  .step-funding__actions .brotar-btn {
+    width: 100%;
+  }
+}

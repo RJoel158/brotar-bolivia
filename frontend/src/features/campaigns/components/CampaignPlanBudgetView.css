@@ -1,0 +1,218 @@
+.plan-budget-view {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.plan-budget-view__block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.plan-budget-view__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 12px;
+}
+
+.plan-budget-view__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--brotar-green-institutional);
+}
+
+.plan-budget-view__meta {
+  font-size: 0.8125rem;
+  color: var(--brotar-text-secondary);
+}
+
+.plan-budget-view__empty {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px dashed var(--brotar-border);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  color: var(--brotar-text-secondary);
+}
+
+.plan-budget-view__timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.plan-budget-view__timeline::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  bottom: 14px;
+  left: 13px;
+  width: 2px;
+  background: var(--brotar-green-tint);
+}
+
+.plan-budget-view__phase {
+  position: relative;
+  display: flex;
+  gap: 12px;
+}
+
+.plan-budget-view__phase-index {
+  z-index: 1;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--brotar-green-action);
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.plan-budget-view__phase-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.plan-budget-view__phase-name {
+  margin: 0;
+  font-weight: 600;
+  color: var(--brotar-text);
+  overflow-wrap: anywhere;
+}
+
+.plan-budget-view__phase-dates {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--brotar-text-secondary);
+}
+
+.plan-budget-view__phase-desc {
+  margin: 4px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--brotar-text);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.plan-budget-view__categories {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.plan-budget-view__category-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.8125rem;
+  color: var(--brotar-text);
+}
+
+.plan-budget-view__bar {
+  height: 6px;
+  margin-top: 4px;
+  border-radius: 999px;
+  background: var(--brotar-neutral-soft);
+  overflow: hidden;
+}
+
+.plan-budget-view__bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--brotar-green-action);
+}
+
+.plan-budget-view__table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--brotar-border);
+  border-radius: var(--radius-md);
+}
+
+.plan-budget-view__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.plan-budget-view__table th,
+.plan-budget-view__table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--brotar-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.plan-budget-view__table thead th {
+  background: var(--brotar-page-bg);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--brotar-text-secondary);
+}
+
+.plan-budget-view__table tfoot th,
+.plan-budget-view__table tfoot td {
+  border-bottom: none;
+  background: var(--brotar-green-tint);
+  color: var(--brotar-green-institutional);
+}
+
+.plan-budget-view__amount {
+  text-align: right !important;
+  white-space: nowrap;
+}
+
+.plan-budget-view__chip {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--brotar-green-tint);
+  color: var(--brotar-green-institutional);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.plan-budget-view__goal {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--brotar-success-soft);
+  color: var(--brotar-success);
+  font-size: 0.875rem;
+}
+
+.plan-budget-view__goal svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.plan-budget-view__goal--warning {
+  background: var(--brotar-warning-soft);
+  color: var(--brotar-warning);
+}

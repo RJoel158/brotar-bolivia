@@ -1,0 +1,91 @@
+.brotar-footer-public {
+  display: none;
+  background: var(--brotar-green-institutional);
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 48px;
+}
+
+@media (min-width: 768px) {
+  .brotar-footer-public {
+    display: block;
+  }
+}
+
+.brotar-footer-public__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px 28px;
+  display: grid;
+  gap: 32px;
+}
+
+@media (min-width: 800px) {
+  .brotar-footer-public__inner {
+    grid-template-columns: 1.2fr 2fr;
+    align-items: start;
+  }
+}
+
+.brotar-footer-public__name {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.brotar-footer-public__tagline {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  max-width: 280px;
+}
+
+.brotar-footer-public__columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 24px;
+}
+
+.brotar-footer-public__col h3 {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.brotar-footer-public__col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.brotar-footer-public__col button,
+.brotar-footer-public__col a {
+  background: none;
+  border: none;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.8);
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+}
+
+.brotar-footer-public__col button:hover,
+.brotar-footer-public__col a:hover {
+  color: #ffffff;
+}
+
+.brotar-footer-public__social {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.brotar-footer-public__bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 16px 20px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.65);
+}

@@ -1,0 +1,142 @@
+.step-general-info {
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.step-general-info__layout {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.step-general-info__content {
+  flex: 1;
+  min-width: 0;
+  max-width: 560px;
+}
+
+.step-general-info__header {
+  margin-bottom: 20px;
+}
+
+.step-general-info__header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--brotar-text);
+  margin-bottom: 6px;
+}
+
+.step-general-info__header p {
+  font-size: 0.9rem;
+  color: var(--brotar-text-secondary);
+}
+
+.step-general-info__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.step-general-info__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.step-general-info__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--brotar-text);
+}
+
+.step-general-info__select,
+.step-general-info__textarea {
+  width: 100%;
+  border: 1px solid var(--brotar-border);
+  border-radius: var(--radius-md);
+  background: var(--brotar-surface);
+  color: var(--brotar-text);
+  font: inherit;
+  outline: none;
+}
+
+.step-general-info__select {
+  height: var(--control-height);
+  padding: 0 14px;
+}
+
+.step-general-info__textarea {
+  padding: 12px 14px;
+  resize: vertical;
+  min-height: 104px;
+}
+
+.step-general-info__select:focus,
+.step-general-info__textarea:focus {
+  border-color: var(--brotar-green-institutional);
+}
+
+.step-general-info__counter {
+  font-size: 0.75rem;
+  color: var(--brotar-text-secondary);
+  text-align: right;
+}
+
+.step-general-info__hint {
+  font-size: 0.75rem;
+  color: var(--brotar-text-secondary);
+}
+
+.step-general-info__error {
+  font-size: 0.75rem;
+  color: var(--brotar-error);
+}
+
+.step-general-info__actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--brotar-border);
+}
+
+.step-general-info__actions-right {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.step-general-info__ready {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--brotar-text-secondary);
+}
+
+@media (max-width: 800px) {
+  .step-general-info__layout {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .step-general-info__content {
+    max-width: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .step-general-info__actions {
+    flex-direction: column-reverse;
+  }
+
+  .step-general-info__actions-right {
+    width: 100%;
+    flex-direction: column-reverse;
+  }
+
+  .step-general-info__actions .brotar-btn {
+    width: 100%;
+  }
+}

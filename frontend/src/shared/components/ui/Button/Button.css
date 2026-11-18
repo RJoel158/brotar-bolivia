@@ -1,0 +1,102 @@
+.brotar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: var(--control-height);
+  padding: 0 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.brotar-btn__content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.brotar-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.brotar-btn--full {
+  width: 100%;
+}
+
+.brotar-btn--primary {
+  background: var(--brotar-green-action);
+  color: #ffffff;
+}
+
+.brotar-btn--primary:hover:not(:disabled) {
+  background: var(--brotar-green-institutional);
+}
+
+.brotar-btn--secondary {
+  background: var(--brotar-surface);
+  color: var(--brotar-green-institutional);
+  border-color: var(--brotar-green-institutional);
+}
+
+.brotar-btn--secondary:hover:not(:disabled) {
+  background: var(--brotar-green-tint);
+}
+
+.brotar-btn--tertiary {
+  background: transparent;
+  color: var(--brotar-green-institutional);
+}
+
+.brotar-btn--tertiary:hover:not(:disabled) {
+  background: var(--brotar-green-tint);
+}
+
+.brotar-btn--destructive {
+  background: var(--brotar-error);
+  color: #ffffff;
+}
+
+.brotar-btn--destructive:hover:not(:disabled) {
+  background: #a52d27;
+}
+
+.brotar-btn--loading {
+  position: relative;
+}
+
+.brotar-btn__label--hidden {
+  opacity: 0;
+}
+
+.brotar-btn__spinner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: brotar-spin 0.7s linear infinite;
+}
+
+.brotar-btn--secondary .brotar-btn__spinner,
+.brotar-btn--tertiary .brotar-btn__spinner {
+  border-color: rgba(14, 75, 52, 0.25);
+  border-top-color: var(--brotar-green-institutional);
+}
+
+@keyframes brotar-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,538 @@
+generator client {
+  provider        = "prisma-client-js"
+  // One JOIN query per read instead of one query per relation (each round trip to the DB is ~200 ms).
+  previewFeatures = ["relationJoins"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Campaign {
+  id                      String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  owner_user_id           String             @db.Uuid
+  organization_id         String?            @db.Uuid
+  category                campaign_category
+  title                   String
+  slug                    String             @unique
+  location                String?
+  short_summary           String?
+  cover_image_url         String?
+  campaign_type           campaign_type
+  funding_model           funding_model
+  goal_amount             Decimal            @db.Decimal(12, 2)
+  current_amount          Decimal            @default(0) @db.Decimal(12, 2)
+  currency                String             @default("BOB")
+  start_date              DateTime?          @db.Date
+  end_date                DateTime?          @db.Date
+  status                  campaign_status    @default(draft)
+  problem                 String?
+  solution                String?
+  beneficiaries           String?
+  expected_impact         String?
+  impact_indicators       String?
+  review_notes            String?
+  review_rejection_reason String?
+  created_at              DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at              DateTime           @default(now()) @db.Timestamptz(6)
+  published_at            DateTime?          @db.Timestamptz(6)
+  campaign_media          campaign_media[]
+  campaign_reviews        campaign_reviews[]
+  campaign_updates        campaign_updates[]
+  campaign_rewards        campaign_rewards[]
+  campaign_activities     campaign_activities[]
+  campaign_budgets        campaign_budgets[]
+  organizations           organizations?     @relation(fields: [organization_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users                   users              @relation(fields: [owner_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  contributions           contributions[]
+  disbursements           disbursements[]
+  disputes                disputes[]
+  campaign_bookmarks      campaign_bookmarks[]
+
+  @@index([category], map: "idx_campaigns_category")
+  @@index([status], map: "idx_campaigns_status")
+  @@map("campaigns")
+}
+
+model campaign_reviews {
+  id               String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  campaign_id      String                 @db.Uuid
+  reviewer_user_id String                 @db.Uuid
+  action           campaign_review_action
+  reason           String?
+  section_notes    Json?
+  created_at       DateTime               @default(now()) @db.Timestamptz(6)
+  campaigns        Campaign               @relation(fields: [campaign_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  reviewer         users                  @relation("campaign_reviewer", fields: [reviewer_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([campaign_id], map: "idx_campaign_reviews_campaign_id")
+  @@index([created_at], map: "idx_campaign_reviews_created_at")
+  @@map("campaign_reviews")
+}
+
+model campaign_media {
+  id          String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  campaign_id String     @db.Uuid
+  url         String
+  media_type  media_type
+  position    Int        @default(0)
+  campaigns   Campaign   @relation(fields: [campaign_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([campaign_id], map: "idx_campaign_media_campaign_id")
+}
+
+model campaign_updates {
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  campaign_id    String           @db.Uuid
+  author_user_id String           @db.Uuid
+  title          String
+  body           String
+  image_url      String?
+  visibility     visibility_scope @default(public)
+  published_at   DateTime?        @db.Timestamptz(6)
+  created_at     DateTime         @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime         @default(now()) @db.Timestamptz(6)
+
+  campaigns Campaign @relation(fields: [campaign_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  author    users    @relation("campaign_update_author", fields: [author_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([campaign_id], map: "idx_campaign_updates_campaign_id")
+  @@index([created_at], map: "idx_campaign_updates_created_at")
+  @@map("campaign_updates")
+}
+
+/// Recompensas de campanas tipo reward. La tabla la crea el DB Master con
+/// backend/prisma/sql/campaign_rewards/; los CHECK de montos y cupos viven
+/// solo en ese SQL porque Prisma no los representa.
+/// quantity_total nulo = ilimitado. quantity_claimed cuenta aportes
+/// confirmados y solo se incrementa al confirmar el pago.
+model campaign_rewards {
+  id                    String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  campaign_id           String          @db.Uuid
+  title                 String          @db.VarChar(200)
+  description           String
+  min_amount            Decimal         @db.Decimal(12, 2)
+  currency              String          @default("BOB") @db.VarChar(6)
+  quantity_total        Int?
+  quantity_claimed      Int             @default(0)
+  estimated_delivery_on DateTime        @db.Date
+  image_url             String?
+  is_active             Boolean         @default(true)
+  display_order         Int             @default(0) @db.SmallInt
+  created_at            DateTime        @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime        @default(now()) @db.Timestamptz(6)
+  campaigns             Campaign        @relation(fields: [campaign_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  contributions         contributions[]
+
+  @@index([campaign_id], map: "idx_campaign_rewards_campaign_id")
+  @@map("campaign_rewards")
+}
+
+model campaign_activities {
+  id               String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  campaign_id      String          @db.Uuid
+  name             String          @db.VarChar(200)
+  description      String?
+  responsible_name String?         @db.VarChar(160)
+  planned_start_on DateTime?       @db.Date
+  planned_end_on   DateTime?       @db.Date
+  status           progress_status @default(planned)
+  progress_percent Int             @default(0) @db.SmallInt
+  display_order    Int             @default(0) @db.SmallInt
+  created_at       DateTime        @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime        @default(now()) @db.Timestamptz(6)
+  campaigns        Campaign        @relation(fields: [campaign_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([campaign_id], map: "idx_campaign_activities_campaign_id")
+  @@map("campaign_activities")
+}
+
+model campaign_budgets {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  campaign_id    String   @db.Uuid
+  category       String   @db.VarChar(80)
+  description    String   @db.VarChar(300)
+  quantity       Decimal  @default(1.00) @db.Decimal(12, 2)
+  unit_price     Decimal? @db.Decimal(12, 2)
+  planned_amount Decimal  @db.Decimal(12, 2)
+  display_order  Int      @default(0) @db.SmallInt
+  notes          String?
+  campaigns      Campaign @relation(fields: [campaign_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([campaign_id], map: "idx_campaign_budgets_campaign_id")
+  @@map("campaign_budgets")
+}
+
+model organization_members {
+  organization_id String        @db.Uuid
+  user_id         String        @db.Uuid
+  role_in_org     String
+  created_at      DateTime      @default(now()) @db.Timestamptz(6)
+  organizations   organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users           users         @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([organization_id, user_id])
+}
+
+model organizations {
+  id                   String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  legal_name           String
+  tax_id               String                 @unique
+  address              String?
+  created_at           DateTime               @default(now()) @db.Timestamptz(6)
+  campaigns            Campaign[]
+  organization_members organization_members[]
+}
+
+model password_reset_tokens {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String    @db.Uuid
+  token_hash String    @unique
+  expires_at DateTime  @db.Timestamptz(6)
+  used_at    DateTime? @db.Timestamptz(6)
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  users      users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model users {
+  id                    String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email                 String                  @unique
+  password_hash         String
+  full_name             String
+  phone                 String?
+  role                  user_role               @default(sponsor)
+  kyc_status            kyc_status              @default(pending)
+  status                String                  @default("active")
+  avatar_url            String?
+  document_id           String?
+  document_type         String?                 @default("CI")
+  organization_name     String?
+  kyc_submitted_at      DateTime?               @db.Timestamptz(6)
+  kyc_reviewed_at       DateTime?               @db.Timestamptz(6)
+  kyc_rejection_reason  String?
+  kyc_notes             String?
+  document_front_url    String?
+  document_back_url     String?
+  created_at            DateTime                @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime                @default(now()) @db.Timestamptz(6)
+  campaigns             Campaign[]
+  campaign_reviews      campaign_reviews[]      @relation("campaign_reviewer")
+  campaign_updates      campaign_updates[]      @relation("campaign_update_author")
+  organization_members  organization_members[]
+  password_reset_tokens password_reset_tokens[]
+
+  // --- Modulo de finanzas (admin) ---
+  contributions            contributions[]
+  disbursements_requested  disbursements[]           @relation("disbursement_requester")
+  disbursements_reviewed   disbursements[]           @relation("disbursement_reviewer")
+  reconciliations_resolved payment_reconciliations[]
+  disputes_reported        disputes[]                @relation("dispute_reporter")
+  disputes_assigned        disputes[]                @relation("dispute_assignee")
+  dispute_messages         dispute_messages[]
+  campaign_bookmarks       campaign_bookmarks[]
+
+  @@map("users")
+}
+
+/// Flag de cambio obligatorio (tabla auxiliar: el rol app no puede ALTER users).
+model user_must_change_password {
+  user_id    String   @id @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+
+  @@map("user_must_change_password")
+}
+
+model campaign_bookmarks {
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id     String        @db.Uuid
+  campaign_id String        @db.Uuid
+  kind        bookmark_kind @default(FAVORITE)
+  created_at  DateTime      @default(now()) @db.Timestamptz(6)
+  users       users         @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  campaigns   Campaign      @relation(fields: [campaign_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([user_id, campaign_id, kind], map: "uq_campaign_bookmarks_user_campaign_kind")
+  @@index([user_id], map: "idx_campaign_bookmarks_user_id")
+  @@index([campaign_id], map: "idx_campaign_bookmarks_campaign_id")
+}
+
+enum campaign_category {
+  social
+  ambiental
+  productivo
+  educacion
+  salud
+  cultura
+  otro
+}
+
+enum campaign_status {
+  draft
+  pending_review
+  approved
+  changes_requested
+  rejected
+  published
+  completed
+  cancelled
+}
+
+enum campaign_review_action {
+  approved
+  rejected
+  changes_requested
+}
+
+enum campaign_type {
+  donation
+  reward
+  presale
+}
+
+enum funding_model {
+  flexible
+  all_or_nothing
+}
+
+enum media_type {
+  image
+  video
+}
+
+enum user_role {
+  admin
+  creator
+  sponsor
+}
+
+enum kyc_status {
+  pending
+  verified
+  rejected
+  requires_documentation
+}
+
+enum visibility_scope {
+  public
+  supporters_only
+}
+
+enum bookmark_kind {
+  FAVORITE
+  FOLLOW
+}
+
+enum progress_status {
+  planned
+  in_progress
+  completed
+  delayed
+  cancelled
+}
+
+// ============================================================================
+// MODULO DE FINANZAS (ADMINISTRACION)
+// Tablas nuevas. No se modifica ninguna columna existente del equipo: en los
+// modelos users y campaigns solo se agregaron los campos de relacion inversa
+// que Prisma exige para poder declarar estas relaciones.
+// ============================================================================
+
+/// Aportes de patrocinadores a una campana. Es la fuente del "Resumen
+/// Financiero": recaudacion bruta, comision Brotar y pendiente de desembolso.
+model contributions {
+  id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  campaign_id       String              @db.Uuid
+  sponsor_user_id   String              @db.Uuid
+  amount            Decimal             @db.Decimal(12, 2)
+  commission_rate   Decimal             @default(5.00) @db.Decimal(5, 2)
+  commission_amount Decimal             @default(0) @db.Decimal(12, 2)
+  net_amount        Decimal             @default(0) @db.Decimal(12, 2)
+  currency          String              @default("BOB")
+  status            contribution_status @default(pending)
+  payment_method    String?
+  gateway_reference String?             @unique
+  paid_at           DateTime?           @db.Timestamptz(6)
+  created_at        DateTime            @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime            @default(now()) @db.Timestamptz(6)
+
+  // --- Flujo de aporte del patrocinador ---
+  contribution_type contribution_type @default(donation)
+  /// Recompensa elegida. La FK (NO ACTION) impide borrar una recompensa con
+  /// aportes; la agrega backend/prisma/sql/campaign_rewards/02_*.sql.
+  reward_id         String?           @db.Uuid
+  supporter_message String?
+  is_anonymous      Boolean           @default(false)
+  cancelled_at      DateTime?         @db.Timestamptz(6)
+  /// Motivo del rechazo que devolvio la pasarela.
+  failure_reason    String?
+
+  campaigns       Campaign                  @relation(fields: [campaign_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users           users                     @relation(fields: [sponsor_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  reward          campaign_rewards?         @relation(fields: [reward_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_contributions_reward_id")
+  reconciliations payment_reconciliations[]
+  disputes        disputes[]
+
+  @@index([campaign_id], map: "idx_contributions_campaign_id")
+  @@index([status], map: "idx_contributions_status")
+  @@index([paid_at], map: "idx_contributions_paid_at")
+  @@index([sponsor_user_id], map: "idx_contributions_sponsor_user_id")
+  @@index([reward_id], map: "idx_contributions_reward_id")
+}
+
+/// Discrepancias entre lo registrado en Brotar y lo que reporta la pasarela.
+/// Alimenta la pantalla de Conciliacion de Pagos.
+model payment_reconciliations {
+  id                  String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  contribution_id     String?               @db.Uuid
+  gateway_reference   String
+  discrepancy_type    discrepancy_type
+  internal_amount     Decimal?              @db.Decimal(12, 2)
+  gateway_amount      Decimal?              @db.Decimal(12, 2)
+  currency            String                @default("BOB")
+  status              reconciliation_status @default(pending)
+  resolved_by_user_id String?               @db.Uuid
+  resolution_note     String?
+  detected_at         DateTime              @default(now()) @db.Timestamptz(6)
+  resolved_at         DateTime?             @db.Timestamptz(6)
+
+  contributions contributions? @relation(fields: [contribution_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  resolved_by   users?         @relation(fields: [resolved_by_user_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@index([status], map: "idx_reconciliations_status")
+  @@index([detected_at], map: "idx_reconciliations_detected_at")
+}
+
+/// Liquidacion de fondos hacia el creador de una campana.
+model disbursements {
+  id                   String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  campaign_id          String              @db.Uuid
+  requested_by_user_id String              @db.Uuid
+  gross_amount         Decimal             @db.Decimal(12, 2)
+  commission_rate      Decimal             @default(5.00) @db.Decimal(5, 2)
+  commission_amount    Decimal             @default(0) @db.Decimal(12, 2)
+  net_amount           Decimal             @default(0) @db.Decimal(12, 2)
+  currency             String              @default("BOB")
+  status               disbursement_status @default(pending)
+  bank_name            String?
+  bank_account         String?
+  account_verified     Boolean             @default(false)
+  reviewed_by_user_id  String?             @db.Uuid
+  reviewed_at          DateTime?           @db.Timestamptz(6)
+  processed_at         DateTime?           @db.Timestamptz(6)
+  failure_reason       String?
+  created_at           DateTime            @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime            @default(now()) @db.Timestamptz(6)
+
+  campaigns    Campaign @relation(fields: [campaign_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  requested_by users    @relation("disbursement_requester", fields: [requested_by_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  reviewed_by  users?   @relation("disbursement_reviewer", fields: [reviewed_by_user_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@index([campaign_id], map: "idx_disbursements_campaign_id")
+  @@index([status], map: "idx_disbursements_status")
+}
+
+/// Casos de soporte abiertos por patrocinadores o creadores sobre una campana.
+model disputes {
+  id                  String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code                String           @unique
+  campaign_id         String           @db.Uuid
+  reporter_user_id    String           @db.Uuid
+  contribution_id     String?          @db.Uuid
+  dispute_type        dispute_type
+  description         String
+  status              dispute_status   @default(open)
+  priority            dispute_priority @default(medium)
+  assigned_to_user_id String?          @db.Uuid
+  resolution          String?
+  opened_at           DateTime         @default(now()) @db.Timestamptz(6)
+  resolved_at         DateTime?        @db.Timestamptz(6)
+  updated_at          DateTime         @default(now()) @db.Timestamptz(6)
+
+  campaigns     Campaign           @relation(fields: [campaign_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  reporter      users              @relation("dispute_reporter", fields: [reporter_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  assigned_to   users?             @relation("dispute_assignee", fields: [assigned_to_user_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  contributions contributions?     @relation(fields: [contribution_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  messages      dispute_messages[]
+
+  @@index([status], map: "idx_disputes_status")
+  @@index([campaign_id], map: "idx_disputes_campaign_id")
+}
+
+/// Hilo de mensajes de un caso ("Informacion del Caso" en el Figma).
+/// author_user_id nulo = mensaje generado por el sistema.
+model dispute_messages {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dispute_id     String   @db.Uuid
+  author_user_id String?  @db.Uuid
+  body           String
+  is_system      Boolean  @default(false)
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+
+  disputes disputes @relation(fields: [dispute_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  author   users?   @relation(fields: [author_user_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@index([dispute_id], map: "idx_dispute_messages_dispute_id")
+}
+
+enum contribution_status {
+  pending
+  confirmed
+  expired
+  failed
+  refunded
+  cancelled
+}
+
+/// Que esta comprando el patrocinador. Se guarda en el aporte en vez de
+/// deducirse de la campana, porque el tipo de la campana puede cambiar y el
+/// aporte tiene que seguir reflejando lo que se acordo al pagarlo.
+enum contribution_type {
+  donation
+  reward
+  presale
+}
+
+enum discrepancy_type {
+  amount_mismatch
+  missing_in_gateway
+  missing_internally
+  duplicated
+}
+
+enum reconciliation_status {
+  pending
+  resolved
+  ignored
+}
+
+enum disbursement_status {
+  pending
+  approved
+  processing
+  completed
+  failed
+  rejected
+}
+
+enum dispute_type {
+  payment_not_recognized
+  reward_not_received
+  metrics_discrepancy
+  project_not_executed
+  refund_request
+  other
+}
+
+enum dispute_status {
+  open
+  in_review
+  resolved
+  rejected
+}
+
+enum dispute_priority {
+  low
+  medium
+  high
+}

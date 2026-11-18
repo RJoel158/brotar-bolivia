@@ -1,0 +1,185 @@
+.brotar-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(14, 75, 52, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+}
+
+.brotar-modal-card {
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #dce5df;
+  box-shadow: 0 16px 40px rgba(14, 75, 52, 0.12);
+  width: 100%;
+  max-width: 520px;
+  overflow: hidden;
+  animation: modalPopIn 0.2s ease-out forwards;
+}
+
+@keyframes modalPopIn {
+  0% { opacity: 0; transform: scale(0.95) translateY(10px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.brotar-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #eef2f0;
+}
+
+.brotar-modal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.brotar-modal-icon-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #eef7f0;
+  color: #0e4b34;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.brotar-modal-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0e4b34;
+  margin: 0;
+}
+
+.brotar-modal-subtitle {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin: 0.15rem 0 0 0;
+}
+
+.brotar-modal-close {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.brotar-modal-close:hover {
+  background: #f1f5f2;
+  color: #0e4b34;
+}
+
+.brotar-modal-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fee2e2;
+  color: #991b1b;
+  font-size: 0.85rem;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid #fecaca;
+}
+
+.brotar-modal-form {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.brotar-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.brotar-form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.brotar-form-input {
+  border: 1px solid #dce5df;
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.9rem;
+  color: #0f172a;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.brotar-form-input:focus {
+  border-color: #17913f;
+  box-shadow: 0 0 0 3px rgba(23, 145, 63, 0.12);
+}
+
+.brotar-form-help {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.brotar-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eef2f0;
+}
+
+.brotar-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #0e4b34;
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 0.65rem 1.25rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.brotar-btn-primary:hover:not(:disabled) {
+  background: #17913f;
+}
+
+.brotar-btn-secondary {
+  background: #f1f5f2;
+  color: #334155;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.65rem 1.15rem;
+  border-radius: 10px;
+  border: 1px solid #dce5df;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.brotar-btn-secondary:hover:not(:disabled) {
+  background: #e2e8e4;
+  color: #0e4b34;
+}
+
+.brotar-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}

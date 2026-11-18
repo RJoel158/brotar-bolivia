@@ -1,0 +1,88 @@
+.brotar-sidebar {
+  width: 260px;
+  min-height: 100%;
+  background: var(--brotar-surface);
+  border-right: 1px solid var(--brotar-border);
+  padding: 20px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.brotar-sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px;
+}
+
+.brotar-sidebar__brand-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--brotar-green-institutional);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+}
+
+.brotar-sidebar__brand-name {
+  font-weight: 800;
+  color: var(--brotar-green-institutional);
+  line-height: 1.1;
+}
+
+.brotar-sidebar__brand-role {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--brotar-text-secondary);
+}
+
+.brotar-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.brotar-sidebar__item {
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 11px 12px;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--brotar-text-secondary);
+  cursor: pointer;
+}
+
+.brotar-sidebar__item:hover {
+  background: var(--brotar-green-tint);
+  color: var(--brotar-green-institutional);
+}
+
+.brotar-sidebar__item.is-active {
+  background: var(--brotar-green-tint);
+  color: var(--brotar-green-institutional);
+}
+
+@media (max-width: 800px) {
+  .brotar-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--brotar-border);
+  }
+
+  .brotar-sidebar__nav {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .brotar-sidebar__item {
+    white-space: nowrap;
+  }
+}

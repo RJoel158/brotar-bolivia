@@ -1,0 +1,166 @@
+.brotar-error-page {
+  min-height: calc(100vh - 140px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.25rem;
+  background: radial-gradient(circle at 50% 20%, rgba(140, 198, 63, 0.08) 0%, rgba(247, 250, 248, 1) 70%);
+}
+
+.brotar-error-card {
+  max-width: 620px;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #dce5df;
+  border-radius: 20px;
+  box-shadow: 0 12px 36px rgba(14, 75, 52, 0.06);
+  padding: 3rem 2.25rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.brotar-error-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #0e4b34 0%, #8cc63f 50%, #17913f 100%);
+}
+
+.brotar-error-mascot-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1.5rem;
+}
+
+.brotar-error-badge {
+  position: absolute;
+  top: 0px;
+  right: -12px;
+  background: #0e4b34;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  box-shadow: 0 4px 12px rgba(14, 75, 52, 0.25);
+  border: 2px solid #ffffff;
+}
+
+.brotar-error-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.brotar-error-eyebrow {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #17913f;
+  background: rgba(23, 145, 63, 0.1);
+  padding: 0.3rem 0.85rem;
+  border-radius: 999px;
+  margin-bottom: 0.85rem;
+}
+
+.brotar-error-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #0e4b34;
+  line-height: 1.25;
+  margin: 0 0 1rem 0;
+  font-family: inherit;
+}
+
+.brotar-error-description {
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: #4b5563;
+  max-width: 480px;
+  margin: 0 auto 2rem auto;
+}
+
+.brotar-error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.brotar-error-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 0.75rem 1.35rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-decoration: none;
+  border: none;
+}
+
+.brotar-error-btn-primary {
+  background: #0e4b34;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(14, 75, 52, 0.2);
+}
+
+.brotar-error-btn-primary:hover {
+  background: #17913f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(23, 145, 63, 0.28);
+}
+
+.brotar-error-btn-secondary {
+  background: #f1f5f2;
+  color: #0e4b34;
+  border: 1px solid #dce5df;
+}
+
+.brotar-error-btn-secondary:hover {
+  background: #e5ece7;
+  color: #0e4b34;
+  border-color: #8cc63f;
+}
+
+.brotar-error-btn-ghost {
+  background: transparent;
+  color: #6b7280;
+}
+
+.brotar-error-btn-ghost:hover {
+  background: #f7faf8;
+  color: #0e4b34;
+}
+
+@media (max-width: 640px) {
+  .brotar-error-card {
+    padding: 2.25rem 1.25rem;
+  }
+
+  .brotar-error-title {
+    font-size: 1.5rem;
+  }
+
+  .brotar-error-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .brotar-error-btn {
+    width: 100%;
+  }
+}

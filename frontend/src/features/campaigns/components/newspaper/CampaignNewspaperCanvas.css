@@ -1,0 +1,740 @@
+/* ==============================================================================
+   BROTAR - CAMPAIGN NEWSPAPER CANVAS (MODULAR EDITORIAL STORY SYSTEM)
+   Modern Editorial Magazine / Newspaper UX with Controlled Block System
+   ============================================================================== */
+
+.brotar-newspaper-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+/* 1. Auxiliary Control Bar */
+.brotar-newspaper-aux-bar {
+  background: #ffffff;
+  border: 1px solid var(--brotar-border, #dce5df);
+  border-left: 4px solid var(--brotar-green-action, #17913f);
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: 0 2px 10px rgba(14, 75, 52, 0.04);
+}
+
+@media (min-width: 768px) {
+  .brotar-newspaper-aux-bar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+}
+
+.brotar-newspaper-aux-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.brotar-newspaper-aux-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--brotar-green-tint, #e9f4ec);
+  color: var(--brotar-green-institutional, #0e4b34);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  width: fit-content;
+}
+
+.brotar-newspaper-aux-hint {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.brotar-newspaper-aux-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.brotar-newspaper-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--brotar-green-institutional, #0e4b34);
+  color: #ffffff;
+  border: none;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 0.6rem 1.1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  box-shadow: 0 4px 12px rgba(14, 75, 52, 0.2);
+}
+
+.brotar-newspaper-mode-btn:hover {
+  background: var(--brotar-green-action, #17913f);
+  transform: translateY(-1px);
+}
+
+.brotar-newspaper-mode-btn.is-active {
+  background: #1e293b;
+}
+
+.brotar-newspaper-reset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.55rem 0.9rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.brotar-newspaper-reset-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+/* 2. Newspaper Sheet Container */
+.brotar-newspaper-sheet {
+  background: #ffffff;
+  border: 1px solid var(--brotar-border, #dce5df);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(14, 75, 52, 0.05);
+  padding: 1.5rem 1.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .brotar-newspaper-sheet {
+    padding: 2.25rem 2rem 2.5rem;
+    gap: 2rem;
+  }
+}
+
+/* 2.1 Masthead (Cabecera) */
+.brotar-newspaper-masthead {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border-bottom: 3px double #0e4b34;
+  padding-bottom: 1.25rem;
+}
+
+.brotar-newspaper-masthead-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e2e8e4;
+  padding-bottom: 0.5rem;
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.brotar-masthead-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.brotar-masthead-badge {
+  background: var(--brotar-green-institutional, #0e4b34);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+}
+
+.brotar-newspaper-title-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: center;
+  padding: 0.75rem 0 0.5rem;
+}
+
+.brotar-newspaper-masthead-title {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--brotar-green-institutional, #0e4b34);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 0;
+  font-family: inherit;
+}
+
+@media (min-width: 768px) {
+  .brotar-newspaper-masthead-title {
+    font-size: 2.6rem;
+  }
+}
+
+.brotar-newspaper-masthead-slug {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: #475569;
+  letter-spacing: 0.02em;
+}
+
+.brotar-newspaper-masthead-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #0e4b34;
+  border-bottom: 1px solid #0e4b34;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--brotar-green-institutional, #0e4b34);
+  letter-spacing: 0.05em;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* 3. Newspaper Body & Block Stack */
+.brotar-newspaper-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.brotar-newspaper-block-wrap {
+  position: relative;
+  transition: all 0.2s ease;
+  border-radius: 12px;
+}
+
+.brotar-newspaper-block-wrap.is-editable-block {
+  border: 1px dashed transparent;
+  padding: 10px;
+  margin: -10px;
+}
+
+.brotar-newspaper-block-wrap.is-editable-block:hover {
+  border-color: #94a3b8;
+  background: #f8fafc;
+}
+
+.brotar-newspaper-block-wrap.is-active-editing {
+  border-color: var(--brotar-green-action, #17913f) !important;
+  background: #f0fdf4 !important;
+  box-shadow: 0 0 0 3px rgba(23, 145, 63, 0.12);
+}
+
+/* Block Toolbar in Edit Mode */
+.brotar-block-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid #cbd5e1;
+}
+
+.brotar-block-type-tag {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #0e4b34;
+  background: #dcfce7;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+
+.brotar-block-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.brotar-block-tool-btn {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #475569;
+  transition: all 0.15s ease;
+}
+
+.brotar-block-tool-btn:hover:not(:disabled) {
+  background: #0e4b34;
+  color: #ffffff;
+  border-color: #0e4b34;
+}
+
+.brotar-block-tool-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.brotar-block-tool-btn.is-danger:hover {
+  background: #ef4444;
+  color: #ffffff;
+  border-color: #ef4444;
+}
+
+/* ==============================================================================
+   Block Type Styles
+   ============================================================================== */
+
+/* 1. Headline Block */
+.np-headline-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.np-headline-kicker {
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--brotar-green-action, #17913f);
+}
+
+.np-headline-title {
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1.2;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+@media (min-width: 640px) {
+  .np-headline-title {
+    font-size: 2.1rem;
+  }
+}
+
+.np-headline-subtitle {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: #475569;
+  margin: 0;
+  font-style: italic;
+}
+
+/* 2. Lead Paragraph Block */
+.np-lead-block {
+  border-left: 3px solid var(--brotar-green-action, #17913f);
+  padding-left: 1.15rem;
+  margin: 0.5rem 0;
+}
+
+.np-lead-text {
+  font-size: 1.12rem;
+  line-height: 1.75;
+  color: #1e293b;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* 3. Two Columns Block */
+.np-two-columns-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  padding: 1.25rem 0;
+  border-top: 1px solid #e2e8e4;
+  border-bottom: 1px solid #e2e8e4;
+}
+
+@media (min-width: 768px) {
+  .np-two-columns-grid {
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1.75rem;
+  }
+
+  .np-col-divider {
+    width: 1px;
+    height: 100%;
+    background: #cbd5e1;
+  }
+}
+
+.np-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.np-col-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0e4b34;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.np-col-text {
+  font-size: 0.95rem;
+  line-height: 1.68;
+  color: #334155;
+  margin: 0;
+}
+
+.np-two-columns-edit {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .np-two-columns-edit {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.np-col-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+/* 4. Paragraph Block */
+.np-paragraph-text {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: #334155;
+  margin: 0;
+}
+
+/* 5. Pull Quote Block */
+.np-quote-block {
+  background: #f4faf6;
+  border: 1px solid #d4ebdc;
+  border-radius: 16px;
+  padding: 1.5rem 1.75rem;
+  margin: 0.75rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  position: relative;
+}
+
+.np-quote-icon {
+  color: #17913f;
+  opacity: 0.75;
+}
+
+.np-quote-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.np-quote-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0e4b34;
+  line-height: 1.45;
+  margin: 0;
+  font-style: italic;
+}
+
+.np-quote-author {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #5a6b62;
+  font-style: normal;
+}
+
+/* 6. Image Feature Block */
+.np-image-block {
+  margin: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.np-image-container {
+  width: 100%;
+  max-height: 440px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.np-image-element {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.np-image-caption {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: #64748b;
+  text-align: center;
+  border-bottom: 1px solid #e2e8e4;
+  padding-bottom: 0.4rem;
+}
+
+/* 7. Bulletin Block (Última hora / Avance) */
+.np-bulletin-block {
+  background: #ffffff;
+  border: 1px solid #dce5df;
+  border-radius: 14px;
+  padding: 1.15rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-shadow: 0 2px 8px rgba(14, 75, 52, 0.04);
+}
+
+.np-bulletin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.np-bulletin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  letter-spacing: 0.05em;
+}
+
+.brotar-pulse-icon {
+  animation: brotarPulse 1.8s infinite;
+}
+
+@keyframes brotarPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.np-bulletin-date {
+  font-size: 0.78rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.np-bulletin-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.np-bulletin-body {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #334155;
+  margin: 0;
+}
+
+/* 8. Metrics Grid Block */
+.np-metrics-block {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.np-metrics-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0e4b34;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.np-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.np-metric-cell {
+  background: #ffffff;
+  border: 1px solid #e2e8e4;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  text-align: center;
+}
+
+.np-metric-val {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #0e4b34;
+}
+
+.np-metric-lbl {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.np-metric-desc {
+  font-size: 0.72rem;
+  color: #94a3b8;
+}
+
+/* ==============================================================================
+   Input Fields inside Edit Mode
+   ============================================================================== */
+.np-input,
+.np-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.92rem;
+  color: #0f172a;
+  background: #ffffff;
+  transition: border-color 0.15s ease;
+}
+
+.np-input:focus,
+.np-textarea:focus {
+  outline: none;
+  border-color: #17913f;
+  box-shadow: 0 0 0 2px rgba(23, 145, 63, 0.15);
+}
+
+.np-input-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.np-textarea-lead {
+  font-size: 1.05rem;
+}
+
+.np-textarea-quote {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0e4b34;
+}
+
+/* 4. Add Block Panel */
+.brotar-add-block-panel {
+  background: #f8fafc;
+  border: 2px dashed #94a3b8;
+  border-radius: 16px;
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+
+.brotar-add-block-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.brotar-add-block-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.brotar-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1e293b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.brotar-add-btn:hover {
+  background: var(--brotar-green-institutional, #0e4b34);
+  color: #ffffff;
+  border-color: var(--brotar-green-institutional, #0e4b34);
+  transform: translateY(-1px);
+}
+
+/* 5. Footer of Newspaper */
+.brotar-newspaper-footer {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.brotar-np-footer-line {
+  height: 2px;
+  background: #0e4b34;
+}
+
+.brotar-np-footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}

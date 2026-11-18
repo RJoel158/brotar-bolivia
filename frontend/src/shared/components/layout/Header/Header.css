@@ -1,0 +1,502 @@
+/* ==============================================================================
+   BROTAR - HEADER COMPONENT (INSTITUTIONAL GREEN THEME)
+   ============================================================================== */
+
+.brotar-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--brotar-green-institutional, #0e4b34);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  transition: all 0.2s ease;
+}
+
+.brotar-header--admin {
+  background: #093323;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.brotar-header__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .brotar-header__inner {
+    padding: 0 24px;
+    height: 70px;
+    gap: 24px;
+  }
+}
+
+/* 1. Left Brand */
+.brotar-header__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.brotar-header__logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--brotar-green-lime, #8cc63f);
+  color: var(--brotar-green-institutional, #0e4b34);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.brotar-header__brand:hover .brotar-header__logo {
+  transform: scale(1.05);
+}
+
+.brotar-header__brand-name {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.04em;
+}
+
+.brand-dot {
+  color: var(--brotar-green-lime, #8cc63f);
+}
+
+/* 2. Center Nav (Desktop Only) */
+.brotar-header__nav {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .brotar-header__nav {
+    display: flex;
+  }
+}
+
+.brotar-header__link {
+  background: none;
+  border: none;
+  padding: 7px 15px;
+  border-radius: 9999px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.brotar-header__link.is-disabled,
+.brotar-header__link:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.brotar-header__link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.brotar-header__link.is-active {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.22);
+  font-weight: 700;
+}
+
+/* 3. Right Actions */
+.brotar-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* Desktop Search Pill (Desktop Only) */
+.brotar-header__desktop-search {
+  display: none;
+  align-items: center;
+  position: relative;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 9999px;
+  padding: 0 10px 0 12px;
+  height: 38px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+@media (min-width: 860px) {
+  .brotar-header__desktop-search {
+    display: flex;
+  }
+}
+
+.brotar-header__desktop-search:focus-within {
+  border-color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 0 3px rgba(140, 198, 63, 0.25);
+}
+
+.brotar-header__search-icon {
+  color: rgba(255, 255, 255, 0.72);
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+.brotar-header__search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.85rem;
+  color: #ffffff;
+  width: 150px;
+}
+
+.brotar-header__search-input::placeholder {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.brotar-header__search-clear {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+}
+
+/* Notification Bell */
+.brotar-header__bell-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.85);
+  position: relative;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.brotar-header__bell-btn:hover {
+  background-color: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.brotar-header__bell-dot {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--brotar-green-lime, #8cc63f);
+  box-shadow: 0 0 0 2px var(--brotar-green-institutional, #0e4b34);
+}
+
+/* Desktop User Profile */
+.brotar-header__user-container {
+  display: none;
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .brotar-header__user-container {
+    display: block;
+  }
+}
+
+.brotar-header__user-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 4px 4px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  height: 38px;
+  box-sizing: border-box;
+}
+
+.brotar-header__user-pill:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.brotar-header__avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--brotar-green-lime, #8cc63f);
+  color: var(--brotar-green-institutional, #0e4b34);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.brotar-header__user-pill-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.brotar-header__dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 210px;
+  background: #ffffff;
+  border: 1px solid var(--brotar-border, #dce5df);
+  border-radius: 14px;
+  padding: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  z-index: 50;
+  animation: brotarMenuFadeIn 0.15s ease;
+}
+
+@keyframes brotarMenuFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.brotar-header__dropdown-header {
+  padding: 6px 10px;
+}
+
+.brotar-header__dropdown-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--brotar-text, #14201a);
+  margin: 0;
+}
+
+.brotar-header__dropdown-role {
+  font-size: 0.72rem;
+  color: var(--brotar-text-secondary, #5a6b62);
+  margin: 2px 0 0 0;
+}
+
+.brotar-header__dropdown-divider {
+  height: 1px;
+  background: var(--brotar-border, #dce5df);
+  margin: 6px 0;
+}
+
+.brotar-header__dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  color: var(--brotar-text, #14201a);
+  font-size: 0.82rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.brotar-header__dropdown-item:hover {
+  background: var(--brotar-green-tint, #e9f4ec);
+  color: var(--brotar-green-institutional, #0e4b34);
+}
+
+.brotar-header__dropdown-item--danger {
+  color: #c4362e;
+}
+
+.brotar-header__dropdown-item--danger:hover {
+  background: #fbeceb;
+  color: #c4362e;
+}
+
+/* Desktop Auth Buttons */
+.brotar-header__desktop-auth {
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (min-width: 768px) {
+  .brotar-header__desktop-auth {
+    display: flex;
+  }
+}
+
+.brotar-header__desktop-auth .brotar-btn--secondary,
+.brotar-header__desktop-auth .brotar-btn--tertiary {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.35);
+  background: transparent;
+}
+
+.brotar-header__desktop-auth .brotar-btn--secondary:hover,
+.brotar-header__desktop-auth .brotar-btn--tertiary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+.brotar-header__desktop-auth .brotar-btn--primary {
+  background: var(--brotar-green-lime, #8cc63f);
+  color: var(--brotar-green-institutional, #0e4b34);
+  font-weight: 700;
+  border-color: transparent;
+}
+
+.brotar-header__desktop-auth .brotar-btn--primary:hover {
+  background: #9fe24a;
+  color: #0e4b34;
+}
+
+/* Mobile Hamburger Toggle (Mobile Only) */
+.brotar-header__hamburger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #ffffff;
+  border-radius: 8px;
+}
+
+@media (min-width: 768px) {
+  .brotar-header__hamburger {
+    display: none !important;
+  }
+}
+
+/* 4. Mobile Drawer */
+.brotar-header__mobile-drawer {
+  padding: 16px;
+  background: #093826;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  animation: brotarMenuFadeIn 0.2s ease;
+}
+
+@media (min-width: 768px) {
+  .brotar-header__mobile-drawer {
+    display: none !important;
+  }
+}
+
+.brotar-header__mobile-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.brotar-header__mobile-search-icon {
+  position: absolute;
+  left: 12px;
+  color: rgba(255, 255, 255, 0.65);
+  pointer-events: none;
+}
+
+.brotar-header__mobile-search-input {
+  width: 100%;
+  padding: 9px 12px 9px 36px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+}
+
+.brotar-header__mobile-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.brotar-header__mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.brotar-header__mobile-link {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+  cursor: pointer;
+}
+
+.brotar-header__mobile-link.is-active,
+.brotar-header__mobile-link:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.brotar-header__mobile-link--danger {
+  color: #fca5a5;
+}
+
+.brotar-header__mobile-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.12);
+  margin: 8px 0;
+}
+
+.brotar-header__mobile-auth {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.brotar-header__mobile-auth .brotar-btn--secondary,
+.brotar-header__mobile-auth .brotar-btn--tertiary {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.35);
+  background: transparent;
+}
+
+.brotar-header__mobile-auth .brotar-btn--primary {
+  background: var(--brotar-green-lime, #8cc63f);
+  color: var(--brotar-green-institutional, #0e4b34);
+  font-weight: 700;
+}

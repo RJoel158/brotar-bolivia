@@ -1,0 +1,27 @@
+.brotar-form-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brotar-paste-btn {
+  background: none;
+  border: none;
+  color: #17913f;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.brotar-paste-btn:hover {
+  text-decoration: underline;
+}
+
+.brotar-code-input {
+  letter-spacing: 0.12em;
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 1.1rem !important;
+  text-transform: uppercase;
+}

@@ -1,0 +1,122 @@
+.brotar-reward-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.brotar-reward-list__state {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--brotar-text-secondary, #475569);
+}
+
+.brotar-reward-list__state--error {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--brotar-error, #b42318);
+}
+
+.brotar-reward-list__retry {
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.25rem 0.8rem;
+  cursor: pointer;
+}
+
+.brotar-reward-card {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  background: #f8faf9;
+  border: 1px solid var(--brotar-border, #dce5df);
+  border-radius: 16px;
+  padding: 1rem 1.15rem;
+  color: var(--brotar-text, #14201a);
+}
+
+.brotar-reward-card--selectable {
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.brotar-reward-card--selectable:not(:disabled):hover {
+  background: #ffffff;
+  border-color: #cce8d5;
+}
+
+.brotar-reward-card--selectable.is-selected {
+  background: #ffffff;
+  border-color: var(--brotar-green-action, #17913f);
+  box-shadow: 0 0 0 2px var(--brotar-green-tint, #e9f4ec);
+}
+
+.brotar-reward-card.is-unavailable {
+  opacity: 0.65;
+}
+
+.brotar-reward-card--selectable:disabled {
+  cursor: not-allowed;
+}
+
+.brotar-reward-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.brotar-reward-card__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--brotar-green-institutional, #0e4b34);
+}
+
+.brotar-reward-card__amount {
+  flex-shrink: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--brotar-green-action, #17913f);
+  background: var(--brotar-green-tint, #e9f4ec);
+  border-radius: 9999px;
+  padding: 0.2rem 0.65rem;
+  white-space: nowrap;
+}
+
+.brotar-reward-card__desc {
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: #475569;
+}
+
+.brotar-reward-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--brotar-text-secondary, #475569);
+}
+
+.brotar-reward-card__meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.brotar-reward-card__status {
+  font-weight: 700;
+  color: var(--brotar-warning, #c77a00);
+}

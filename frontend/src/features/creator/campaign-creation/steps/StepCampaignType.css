@@ -1,0 +1,44 @@
+.step-campaign-type {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.step-campaign-type__header {
+  margin-bottom: 20px;
+}
+
+.step-campaign-type__header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--brotar-text);
+  margin-bottom: 6px;
+}
+
+.step-campaign-type__header p {
+  font-size: 0.9rem;
+  color: var(--brotar-text-secondary);
+}
+
+.step-campaign-type__options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.step-campaign-type__actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+@media (max-width: 600px) {
+  .step-campaign-type__actions {
+    flex-direction: column-reverse;
+  }
+
+  .step-campaign-type__actions .brotar-btn {
+    width: 100%;
+  }
+}

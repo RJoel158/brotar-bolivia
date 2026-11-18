@@ -1,0 +1,26 @@
+.campaign-step-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.campaign-step-progress__meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--brotar-text-secondary);
+}
+
+.campaign-step-progress__track {
+  height: 4px;
+  background: var(--brotar-border);
+  overflow: hidden;
+}
+
+.campaign-step-progress__fill {
+  height: 100%;
+  background: var(--brotar-green-institutional);
+  transition: width 0.2s ease;
+}

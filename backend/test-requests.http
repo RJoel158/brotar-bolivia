@@ -1,0 +1,81 @@
+### ===================================================
+### BROTAR API - PRUEBAS DE ENDPOINTS (USERS & AUTH)
+### Extensión recomendada: "REST Client" o "Thunder Client"
+### ===================================================
+
+@baseUrl = http://localhost:3000
+
+### 1. Test Health / Root
+GET {{baseUrl}}/
+Accept: application/json
+
+### ---------------------------------------------------
+### 2. AUTH: Registrar un nuevo creador (CREATOR)
+# @name registerCreator
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "ana.flores@ecoverde.bo",
+  "password": "Password123!",
+  "fullName": "Ana Flores",
+  "role": "creator",
+  "phone": "+591 71234567"
+}
+
+### ---------------------------------------------------
+### 3. AUTH: Registrar un Administrador (ADMIN)
+# @name registerAdmin
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "admin.ana@brotar.bo",
+  "password": "AdminPassword123!",
+  "fullName": "Ana Delgado",
+  "role": "sponsor",
+  "phone": "+591 70000001"
+}
+
+### ---------------------------------------------------
+### 4. AUTH: Iniciar Sesión (Login)
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "ana.flores@ecoverde.bo",
+  "password": "Password123!"
+}
+
+### Guardar Token de la respuesta
+@authToken = {{login.response.body.accessToken}}
+@targetUserId = {{login.response.body.user.id}}
+
+### ---------------------------------------------------
+### 5. USERS: Obtener mi perfil autenticado (GET /users/me)
+GET {{baseUrl}}/users/me
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### ---------------------------------------------------
+### 6. USERS: Listar todos los usuarios con filtros (Solo Admin)
+GET {{baseUrl}}/users?role=creator&kycStatus=pending
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### ---------------------------------------------------
+### 7. USERS: Obtener usuario por ID
+GET {{baseUrl}}/users/{{targetUserId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### ---------------------------------------------------
+### 8. USERS: Actualizar Estado KYC a Verificado (Solo Admin)
+PATCH {{baseUrl}}/users/{{targetUserId}}/kyc-status
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "kycStatus": "verified"
+}

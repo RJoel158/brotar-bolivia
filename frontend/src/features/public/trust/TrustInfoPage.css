@@ -1,0 +1,121 @@
+.brotar-trust {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 16px 56px;
+  color: #1f2a24;
+}
+
+.brotar-trust__header {
+  margin-bottom: 28px;
+}
+
+.brotar-trust__title {
+  font-size: 1.9rem;
+  font-weight: 800;
+  margin: 0 0 8px;
+  color: #0f3d2e;
+}
+
+.brotar-trust__subtitle {
+  margin: 0 0 18px;
+  color: #4b5b52;
+  line-height: 1.55;
+}
+
+.brotar-trust__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.brotar-trust__tabs button {
+  border: 1px solid #cfe3d7;
+  background: #ffffff;
+  color: #14532d;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.brotar-trust__tabs button.is-active,
+.brotar-trust__tabs button:hover {
+  background: #14532d;
+  border-color: #14532d;
+  color: #ffffff;
+}
+
+.brotar-trust__section {
+  scroll-margin-top: 90px;
+  margin-bottom: 36px;
+}
+
+.brotar-trust__section h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #0f3d2e;
+  margin: 0 0 14px;
+}
+
+.brotar-trust__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.brotar-trust__card {
+  background: #ffffff;
+  border: 1px solid #e3eee7;
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+
+.brotar-trust__card h3 {
+  font-size: 1rem;
+  margin: 0 0 6px;
+  color: #14532d;
+}
+
+.brotar-trust__card p,
+.brotar-trust__faq-item p,
+.brotar-trust__terms li {
+  margin: 0;
+  color: #44544b;
+  line-height: 1.55;
+  font-size: 0.94rem;
+}
+
+.brotar-trust__faq {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.brotar-trust__faq-item {
+  background: #ffffff;
+  border: 1px solid #e3eee7;
+  border-radius: 12px;
+  padding: 12px 16px;
+}
+
+.brotar-trust__faq-item summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #14532d;
+}
+
+.brotar-trust__faq-item[open] summary {
+  margin-bottom: 8px;
+}
+
+.brotar-trust__terms {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

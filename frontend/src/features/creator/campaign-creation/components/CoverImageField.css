@@ -1,0 +1,86 @@
+.cover-image-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cover-image-field__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--brotar-text);
+}
+
+.cover-image-field__dropzone {
+  border: 1px dashed var(--brotar-border);
+  border-radius: var(--radius-md);
+  background: var(--brotar-surface);
+  padding: 16px;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.cover-image-field__dropzone.is-dragging {
+  border-color: var(--brotar-green-institutional);
+  background: var(--brotar-green-tint);
+}
+
+.cover-image-field__hint {
+  font-size: 0.85rem;
+  color: var(--brotar-text-secondary);
+  text-align: center;
+}
+
+.cover-image-field__preview {
+  max-height: 140px;
+  max-width: 100%;
+  object-fit: cover;
+}
+
+.cover-image-field__actions {
+  display: flex;
+  gap: 12px;
+}
+
+.cover-image-field__browse,
+.cover-image-field__remove {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cover-image-field__browse {
+  color: var(--brotar-green-institutional);
+}
+
+.cover-image-field__remove {
+  color: var(--brotar-error);
+}
+
+.cover-image-field__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.cover-image-field__helper,
+.cover-image-field__error {
+  font-size: 0.75rem;
+}
+
+.cover-image-field__helper {
+  color: var(--brotar-text-secondary);
+}
+
+.cover-image-field__error {
+  color: var(--brotar-error);
+}

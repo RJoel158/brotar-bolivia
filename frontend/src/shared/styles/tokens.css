@@ -1,0 +1,47 @@
+:root {
+  /* Identidad Brotar */
+  --brotar-green-institutional: #0e4b34;
+  --brotar-green-action: #17913f;
+  --brotar-green-lime: #8cc63f;
+  --brotar-green-tint: #e9f4ec;
+  --brotar-page-bg: #f7faf8;
+  --brotar-surface: #ffffff;
+  --brotar-border: #dce5df;
+  --brotar-text: #14201a;
+  --brotar-text-secondary: #5a6b62;
+
+  /* Estados */
+  --brotar-success: #17913f;
+  --brotar-warning: #c77a00;
+  --brotar-error: #c4362e;
+  --brotar-review: #2563a5;
+  --brotar-neutral: #6b7a72;
+
+  /* Fondos suaves de estado */
+  --brotar-success-soft: #e7f6ec;
+  --brotar-warning-soft: #fdf3e3;
+  --brotar-error-soft: #fbeceb;
+  --brotar-review-soft: #e8f0f9;
+  --brotar-neutral-soft: #eef1ef;
+
+  /* Compatibilidad con estilos existentes */
+  --color-primary: var(--brotar-green-action);
+  --color-primary-hover: var(--brotar-green-institutional);
+  --color-primary-light: var(--brotar-green-tint);
+  --color-primary-dark: var(--brotar-green-institutional);
+  --color-accent: var(--brotar-green-lime);
+  --color-bg: var(--brotar-page-bg);
+  --color-card-bg: var(--brotar-surface);
+  --color-text-main: var(--brotar-text);
+  --color-text-muted: var(--brotar-text-secondary);
+  --color-border: var(--brotar-border);
+
+  --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --control-height: 44px;
+  --shadow-sm: 0 1px 2px rgba(20, 32, 26, 0.05);
+  --shadow-md: 0 4px 10px rgba(20, 32, 26, 0.06);
+  --shadow-lg: 0 10px 20px rgba(20, 32, 26, 0.08);
+}

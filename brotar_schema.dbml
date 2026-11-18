@@ -1,0 +1,696 @@
+// ==============================================================================
+// BROTAR - DIAGRAMA ENTIDAD-RELACIÓN OFICIAL (DBML)
+// ==============================================================================
+// CÓMO VISUALIZARLO:
+// 1. Entra a https://dbdiagram.io/d
+// 2. Borra el código de ejemplo y pega todo este archivo.
+// 3. Verás el esquema organizado en 6 bloques temáticos con colores.
+// ==============================================================================
+
+Project Brotar_Crowdfunding {
+  database_type: 'PostgreSQL'
+  Note: '''
+    # Brotar - Crowdfunding Verde
+    Plataforma de financiamiento colectivo con impacto social, ambiental y productivo.
+  '''
+}
+
+// ==============================================================================
+// 0. ENUMS Y ESTADOS
+// ==============================================================================
+
+Enum user_role {
+  admin
+  creator
+  sponsor
+}
+
+Enum kyc_status {
+  pending
+  verified
+  rejected
+  requires_documentation
+}
+
+Enum campaign_category {
+  social
+  ambiental
+  productivo
+  educacion
+  salud
+  cultura
+  otro
+}
+
+Enum campaign_type {
+  donation
+  reward
+  presale
+}
+
+Enum funding_model {
+  flexible
+  all_or_nothing
+}
+
+Enum campaign_status {
+  draft
+  pending_review
+  approved
+  changes_requested
+  rejected
+  published
+  completed
+  cancelled
+}
+
+Enum progress_status {
+  planned
+  in_progress
+  completed
+  delayed
+  cancelled
+}
+
+Enum review_decision {
+  pending
+  approved
+  changes_requested
+  rejected
+}
+
+Enum observation_severity {
+  INFO
+  MINOR
+  BLOCKER
+}
+
+Enum observation_status {
+  OPEN
+  ADDRESSED
+  ACCEPTED
+  DISMISSED
+}
+
+Enum contribution_status {
+  pending
+  confirmed
+  expired
+  failed
+  refunded
+}
+
+Enum refund_status {
+  requested
+  processing
+  refunded
+  failed
+}
+
+Enum reward_fulfillment_status {
+  pending
+  in_progress
+  fulfilled
+  cancelled
+}
+
+Enum payout_account_status {
+  pending
+  verified
+  rejected
+}
+
+Enum disbursement_status {
+  pending
+  approved
+  processing
+  completed
+  failed
+}
+
+Enum dispute_type {
+  payment_not_recognized
+  reward_not_received
+  metrics_discrepancy
+  project_not_executed
+  refund_request
+  other
+}
+
+Enum dispute_status {
+  open
+  in_review
+  resolved
+  rejected
+}
+
+Enum dispute_priority {
+  low
+  medium
+  high
+}
+
+Enum discrepancy_type {
+  amount_mismatch
+  missing_in_gateway
+  missing_internally
+  duplicated
+}
+
+Enum reconciliation_status {
+  pending
+  resolved
+  ignored
+}
+
+Enum bookmark_kind {
+  FAVORITE
+  FOLLOW
+}
+
+Enum visibility_scope {
+  PUBLIC
+  SUPPORTERS_ONLY
+  PRIVATE
+}
+
+// ==============================================================================
+// 1. BLOQUE: USUARIOS, IDENTIDAD Y KYC (Color Azul)
+// ==============================================================================
+
+Table users {
+  id uuid [pk, default: `gen_random_uuid()`, note: 'Identificador único del usuario']
+  email varchar(255) [unique, not null, note: 'Correo electrónico institucional o personal']
+  password_hash text [not null, note: 'Hash seguro de contraseña (Bcrypt 10 rounds)']
+  full_name varchar(160) [not null, note: 'Nombre completo o razón social']
+  phone varchar(30) [note: 'Teléfono de contacto con código de país']
+  role user_role [not null, default: 'sponsor', note: 'Rol en la plataforma: admin, creator, sponsor']
+  status varchar(40) [not null, default: 'active', note: 'Estado de cuenta: active, suspended, etc.']
+  avatar_url text [note: 'Foto de perfil del usuario']
+
+  // Verificación KYC (Personas) / KYB (Organizaciones)
+  document_id varchar(40) [note: 'Número de documento (CI, NIT o Pasaporte)']
+  document_type varchar(20) [default: 'CI', note: 'Tipo de documento: CI, NIT, PASSPORT, FOREIGN']
+  organization_name varchar(160) [note: 'Nombre de la empresa u ONG (si aplica)']
+  kyc_status kyc_status [not null, default: 'pending', note: 'Estado KYC: pending, verified, rejected, requires_documentation']
+  kyc_submitted_at timestamptz [note: 'Fecha y hora de envío de documentos']
+  kyc_reviewed_at timestamptz [note: 'Fecha y hora de auditoría']
+  kyc_rejection_reason text [note: 'Motivo de rechazo para corrección']
+  kyc_notes text [note: 'Observaciones internas del equipo de compliance']
+  document_front_url text [note: 'Foto frontal del documento (sanitizada y verificada)']
+  document_back_url text [note: 'Foto posterior del documento (sanitizada y verificada)']
+
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table organizations {
+  id uuid [pk, default: `gen_random_uuid()`]
+  legal_name varchar(200) [not null, note: 'Razón social legal de la organización']
+  tax_id varchar(60) [unique, not null, note: 'NIT o registro tributario legal']
+  address text [note: 'Dirección legal']
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table organization_members {
+  organization_id uuid [not null]
+  user_id uuid [not null]
+  role_in_org varchar(60) [not null, note: 'Cargo: Representante Legal, Administrador, Miembro']
+  created_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    (organization_id, user_id) [pk]
+  }
+}
+
+Table password_reset_tokens {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null]
+  token_hash varchar(255) [unique, not null]
+  expires_at timestamptz [not null]
+  used_at timestamptz
+  created_at timestamptz [not null, default: `now()`]
+}
+
+// ==============================================================================
+// 2. BLOQUE: CAMPAÑAS Y ASISTENTE 8 PASOS (Color Verde)
+// ==============================================================================
+
+Table campaigns {
+  id uuid [pk, default: `gen_random_uuid()`]
+  owner_user_id uuid [not null, note: 'Usuario creador responsable del proyecto']
+  organization_id uuid [note: 'Organización propietaria (si es persona jurídica)']
+  
+  // Paso 1: Tipo y Modelo
+  campaign_type campaign_type [not null, default: 'donation', note: 'donación, recompensa, preventa']
+  funding_model funding_model [not null, default: 'flexible', note: 'flexible o todo_o_nada']
+  
+  // Paso 2: Información General
+  title varchar(200) [not null, note: 'Título de la campaña']
+  slug varchar(200) [unique, not null, note: 'URL amigable para compartir']
+  category campaign_category [not null, note: 'social, ambiental, productivo, salud, etc.']
+  location varchar(160) [note: 'Departamento o ciudad (ej. Cochabamba, Bolivia)']
+  short_summary varchar(500) [note: 'Resumen corto para tarjetas de exploración']
+  cover_image_url text [note: 'Imagen de portada optimizada']
+  video_url text [note: 'Enlace a video explicativo (YouTube/Vimeo)']
+
+  // Paso 3: Historia e Impacto
+  problem text [note: 'Problema identificado que busca resolver']
+  solution text [note: 'Solución propuesta']
+  beneficiaries text [note: 'Beneficiarios directos del proyecto']
+  expected_impact text [note: 'Impacto ambiental o social esperado']
+
+  // Paso 5: Financiamiento
+  goal_amount decimal(12,2) [not null, note: 'Meta económica a recaudar']
+  current_amount decimal(12,2) [not null, default: 0.00, note: 'Monto total recaudado hasta la fecha']
+  currency varchar(6) [not null, default: 'BOB', note: 'Moneda (BOB = Bolivianos)']
+  min_contribution decimal(12,2) [note: 'Aporte mínimo permitido']
+  duration_days int [note: 'Duración de la recaudación en días']
+  start_date date [note: 'Fecha de inicio']
+  end_date date [note: 'Fecha de finalización']
+
+  // Estado del Ciclo de Vida
+  status campaign_status [not null, default: 'draft', note: 'draft, pending_review, approved, published, completed, cancelled']
+  builder_step smallint [not null, default: 1, note: 'Paso actual del asistente (1 al 8)']
+  
+  published_at timestamptz [note: 'Fecha de publicación oficial']
+  cancellation_reason text
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table campaign_media {
+  id uuid [pk, default: `gen_random_uuid()`]
+  campaign_id uuid [not null]
+  url text [not null, note: 'URL de imagen o video adicional']
+  media_type varchar(20) [not null, default: 'image']
+  position int [not null, default: 0, note: 'Orden de visualización en galería']
+}
+
+Table campaign_budgets {
+  id uuid [pk, default: `gen_random_uuid()`]
+  campaign_id uuid [not null]
+  category varchar(80) [not null, note: 'Categoría: Materiales, Mano de obra, Logística, etc.']
+  description varchar(300) [not null, note: 'Descripción del gasto']
+  quantity decimal(12,2) [not null, default: 1.00, note: 'Cantidad requerida']
+  unit_price decimal(12,2) [note: 'Precio unitario']
+  planned_amount decimal(12,2) [not null, note: 'Monto total presupuestado (debe cuadrar con la meta)']
+  display_order smallint [not null, default: 0]
+  notes text
+}
+
+Table campaign_activities {
+  id uuid [pk, default: `gen_random_uuid()`]
+  campaign_id uuid [not null]
+  name varchar(200) [not null, note: 'Nombre de la actividad o hito']
+  description text
+  responsible_name varchar(160) [note: 'Persona o equipo responsable']
+  planned_start_on date [note: 'Fecha estimada de inicio']
+  planned_end_on date [note: 'Fecha estimada de fin']
+  status progress_status [not null, default: 'planned', note: 'planned, in_progress, completed, delayed']
+  progress_percent smallint [not null, default: 0, note: 'Porcentaje de avance (0 a 100%)']
+  display_order smallint [not null, default: 0]
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table campaign_risks {
+  id uuid [pk, default: `gen_random_uuid()`]
+  campaign_id uuid [not null]
+  title varchar(200) [not null, note: 'Riesgo identificado']
+  description text
+  likelihood varchar(40) [note: 'Probabilidad: Baja, Media, Alta']
+  impact varchar(40) [note: 'Impacto: Bajo, Medio, Alto']
+  mitigation text [not null, note: 'Plan de mitigación']
+  display_order smallint [not null, default: 0]
+}
+
+Table campaign_rewards {
+  id uuid [pk, default: `gen_random_uuid()`]
+  campaign_id uuid [not null]
+  title varchar(200) [not null, note: 'Título de la recompensa (ej. Camiseta ecológica, Preventa Pack)']
+  description text [not null, note: 'Detalle de lo que incluye']
+  min_amount decimal(12,2) [not null, note: 'Monto mínimo de aporte requerido']
+  currency varchar(6) [not null, default: 'BOB']
+  quantity_total int [note: 'Cupo o stock total disponible (nulo = ilimitado)']
+  quantity_claimed int [not null, default: 0, note: 'Cantidad reclamada por patrocinadores']
+  estimated_delivery_on date [note: 'Fecha estimada de entrega']
+  image_url text [note: 'Foto de la recompensa']
+  is_active boolean [not null, default: true]
+  display_order smallint [not null, default: 0]
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table campaign_impacts {
+  id uuid [pk, default: `gen_random_uuid()`]
+  campaign_id uuid [not null]
+  name varchar(200) [not null, note: 'Indicador (ej. Árboles plantados, Familias beneficiadas)']
+  unit varchar(60) [note: 'Unidad de medida: árboles, hectáreas, personas']
+  baseline_value decimal(14,2) [note: 'Valor inicial de partida']
+  target_value decimal(14,2) [note: 'Meta de impacto proyectada']
+  achieved_value decimal(14,2) [note: 'Valor real logrado']
+  display_order smallint [not null, default: 0]
+}
+
+// ==============================================================================
+// 3. BLOQUE: AUDITORÍA Y REVISIÓN DE CAMPAÑAS (Color Morado)
+// ==============================================================================
+
+Table campaign_reviews {
+  id uuid [pk, default: `gen_random_uuid()`]
+  campaign_id uuid [not null]
+  round smallint [not null, default: 1, note: 'Ronda de revisión (1, 2, 3...)']
+  reviewer_user_id uuid [note: 'Auditor de Brotar asignado']
+  decision review_decision [not null, default: 'pending', note: 'approved, rejected, changes_requested, pending']
+  summary text [note: 'Resumen o conclusión de la evaluación']
+  internal_notes text [note: 'Notas privadas para el equipo administrativo']
+  assigned_at timestamptz [not null, default: `now()`]
+  decided_at timestamptz [note: 'Fecha de la decisión']
+
+  indexes {
+    (campaign_id, round) [unique]
+  }
+}
+
+Table campaign_review_observations {
+  id uuid [pk, default: `gen_random_uuid()`]
+  review_id uuid [not null]
+  section varchar(80) [not null, note: 'Sección del wizard: general, budget, story, rewards, etc.']
+  field_path varchar(160) [note: 'Campo específico señalado']
+  severity observation_severity [not null, default: 'INFO', note: 'INFO, MINOR, BLOCKER']
+  status observation_status [not null, default: 'OPEN', note: 'OPEN, ADDRESSED, ACCEPTED, DISMISSED']
+  message text [not null, note: 'Observación detallada para que el creador corrija']
+  resolution_note text [note: 'Respuesta o aclaración del creador tras corregir']
+  created_at timestamptz [not null, default: `now()`]
+  resolved_at timestamptz
+}
+
+// ==============================================================================
+// 4. BLOQUE: FINANZAS, APORTES Y PAGOS (Color Amarillo/Naranja)
+// ==============================================================================
+
+Table contributions {
+  id uuid [pk, default: `gen_random_uuid()`]
+  reference_code varchar(30) [unique, not null, note: 'Código legible de recibo (ej. BRT-C-000123)']
+  campaign_id uuid [not null]
+  sponsor_user_id uuid [not null, note: 'Patrocinador que aporta']
+  reward_id uuid [note: 'Recompensa seleccionada (opcional)']
+  
+  amount decimal(12,2) [not null, note: 'Monto total aportado']
+  commission_rate decimal(5,2) [not null, default: 5.00, note: 'Porcentaje de comisión Brotar (5%)']
+  commission_amount decimal(12,2) [not null, default: 0.00, note: 'Comisión en dinero calculada']
+  net_amount decimal(12,2) [not null, default: 0.00, note: 'Monto neto para el proyecto']
+  currency varchar(6) [not null, default: 'BOB']
+  
+  status contribution_status [not null, default: 'pending', note: 'pending, confirmed, expired, failed, refunded']
+  is_anonymous boolean [not null, default: false, note: 'Si el patrocinador desea ocultar su nombre']
+  supporter_message text [note: 'Mensaje de aliento público o privado']
+  supporter_message_visibility visibility_scope [not null, default: 'PUBLIC']
+  
+  payment_method varchar(60) [note: 'Método: QR Simple, Tarjeta, Transferencia']
+  gateway_reference varchar(200) [unique, note: 'ID de transacción de la pasarela de pagos']
+  paid_at timestamptz [note: 'Fecha y hora en que se confirmó el pago']
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table reward_fulfillments {
+  id uuid [pk, default: `gen_random_uuid()`]
+  contribution_id uuid [unique, not null, note: 'Aporte asociado a la recompensa']
+  status reward_fulfillment_status [not null, default: 'pending', note: 'pending, in_progress, fulfilled, cancelled']
+  fulfilled_at timestamptz [note: 'Fecha en que se entregó la recompensa']
+  notes text [note: 'Notas de envío o entrega']
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table refunds {
+  id uuid [pk, default: `gen_random_uuid()`]
+  contribution_id uuid [not null]
+  amount decimal(12,2) [not null, note: 'Monto devuelto']
+  currency varchar(6) [not null, default: 'BOB']
+  reason_code varchar(80) [note: 'Motivo: Campaña cancelada, Reclamo resuelto, etc.']
+  reason_detail text
+  status refund_status [not null, default: 'requested', note: 'requested, processing, refunded, failed']
+  requested_by_user_id uuid [note: 'Usuario que solicitó la devolución']
+  approved_by_user_id uuid [note: 'Administrador que aprobó la devolución']
+  processed_at timestamptz [note: 'Fecha de ejecución en pasarela']
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table payout_accounts {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [note: 'Creador titular']
+  organization_id uuid [note: 'Organización titular (si aplica)']
+  account_holder_name varchar(200) [not null, note: 'Nombre completo del titular de la cuenta bancaria']
+  bank_name varchar(160) [not null, note: 'Banco (ej. Banco Unión, Banco BCP, etc.)']
+  account_type varchar(40) [not null, note: 'Caja de Ahorro, Cuenta Corriente']
+  account_number varchar(80) [not null, note: 'Número de cuenta']
+  currency varchar(6) [not null, default: 'BOB']
+  status payout_account_status [not null, default: 'pending', note: 'pending, verified, rejected']
+  is_default boolean [not null, default: false]
+  verified_by_user_id uuid [note: 'Auditor de compliance que verificó la cuenta']
+  verified_at timestamptz
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table disbursements {
+  id uuid [pk, default: `gen_random_uuid()`]
+  disbursement_number varchar(30) [unique, not null, note: 'Código de liquidación (ej. BRT-P-00045)']
+  campaign_id uuid [not null]
+  payout_account_id uuid [not null, note: 'Cuenta bancaria de destino']
+  requested_by_user_id uuid [not null, note: 'Creador solicitante']
+  gross_amount decimal(12,2) [not null, note: 'Total recaudado a liquidar']
+  commission_rate decimal(5,2) [not null, default: 5.00]
+  commission_amount decimal(12,2) [not null, default: 0.00, note: 'Comisión retenida por Brotar']
+  net_amount decimal(12,2) [not null, default: 0.00, note: 'Monto neto transferido al creador']
+  currency varchar(6) [not null, default: 'BOB']
+  status disbursement_status [not null, default: 'pending', note: 'pending, approved, processing, completed, failed']
+  reviewed_by_user_id uuid [note: 'Encargado de finanzas que autorizó']
+  reviewed_at timestamptz
+  processed_at timestamptz [note: 'Fecha de transferencia bancaria confirmada']
+  failure_reason text
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table payment_reconciliations {
+  id uuid [pk, default: `gen_random_uuid()`]
+  contribution_id uuid
+  gateway_reference varchar(200) [not null, note: 'Referencia en pasarela']
+  discrepancy_type discrepancy_type [not null, note: 'Diferencia de monto, pago duplicado, etc.']
+  internal_amount decimal(12,2) [note: 'Monto registrado en base de datos']
+  gateway_amount decimal(12,2) [note: 'Monto reportado por la pasarela']
+  currency varchar(6) [not null, default: 'BOB']
+  status reconciliation_status [not null, default: 'pending', note: 'pending, resolved, ignored']
+  resolved_by_user_id uuid
+  resolution_note text [note: 'Explicación del ajuste contable']
+  detected_at timestamptz [not null, default: `now()`]
+  resolved_at timestamptz
+}
+
+// ==============================================================================
+// 5. BLOQUE: RENDICIÓN DE CUENTAS Y AVANCES (Color Turquesa)
+// ==============================================================================
+
+Table campaign_updates {
+  id uuid [pk, default: `gen_random_uuid()`]
+  campaign_id uuid [not null]
+  author_user_id uuid [not null, note: 'Creador que publica la actualización']
+  title varchar(200) [not null, note: 'Título de la novedad']
+  body text [not null, note: 'Contenido del comunicado']
+  visibility visibility_scope [not null, default: 'PUBLIC', note: 'Público o Solo Patrocinadores']
+  published_at timestamptz
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table evidences {
+  id uuid [pk, default: `gen_random_uuid()`]
+  campaign_id uuid [not null]
+  title varchar(200) [not null, note: 'Título de la evidencia (ej. Factura compra de plantines)']
+  description text
+  external_url text [note: 'Enlace a foto, video o documento de respaldo']
+  recorded_on date [note: 'Fecha de la evidencia']
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table accountability_reports {
+  id uuid [pk, default: `gen_random_uuid()`]
+  campaign_id uuid [not null]
+  period_label varchar(80) [note: 'Periodo (ej. Primer Trimestre 2026)']
+  period_start date
+  period_end date
+  funds_received decimal(12,2) [note: 'Fondos desembolsados recibidos']
+  funds_spent decimal(12,2) [note: 'Fondos ejecutados y gastados']
+  balance decimal(12,2) [note: 'Saldo remanente']
+  narrative text [note: 'Explicación de logros alcanzados']
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table accountability_expenses {
+  id uuid [pk, default: `gen_random_uuid()`]
+  report_id uuid [not null]
+  budget_item_id uuid [note: 'Ítem del presupuesto inicial que se está ejecutando']
+  description varchar(300) [not null, note: 'Detalle del gasto']
+  spent_amount decimal(12,2) [not null, note: 'Monto gastado']
+  spent_on date [note: 'Fecha del recibo o factura']
+  supplier varchar(200) [note: 'Proveedor contratado']
+  receipt_number varchar(80) [note: 'Número de factura o recibo oficial']
+  receipt_image_url text [note: 'Foto o PDF del comprobante']
+  created_at timestamptz [not null, default: `now()`]
+}
+
+// ==============================================================================
+// 6. BLOQUE: SOPORTE, DISPUTAS Y FAVORITOS (Color Rojo)
+// ==============================================================================
+
+Table disputes {
+  id uuid [pk, default: `gen_random_uuid()`]
+  code varchar(30) [unique, not null, note: 'Código de caso (ej. BRT-D-000456)']
+  campaign_id uuid [not null]
+  reporter_user_id uuid [not null, note: 'Patrocinador o creador que abre el caso']
+  contribution_id uuid [note: 'Aporte en disputa (si aplica)']
+  dispute_type dispute_type [not null, note: 'pago no reconocido, recompensa no entregada, etc.']
+  description text [not null, note: 'Explicación del reclamo']
+  status dispute_status [not null, default: 'open', note: 'open, in_review, resolved, rejected']
+  priority dispute_priority [not null, default: 'medium', note: 'low, medium, high']
+  assigned_to_user_id uuid [note: 'Agente de soporte asignado']
+  resolution text [note: 'Resolución final del caso']
+  opened_at timestamptz [not null, default: `now()`]
+  resolved_at timestamptz
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table dispute_messages {
+  id uuid [pk, default: `gen_random_uuid()`]
+  dispute_id uuid [not null]
+  author_user_id uuid [note: 'Usuario que envía el mensaje (nulo = mensaje automático del sistema)']
+  body text [not null, note: 'Contenido del mensaje']
+  is_system boolean [not null, default: false, note: 'Verdadero si es aviso del sistema']
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table campaign_bookmarks {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null]
+  campaign_id uuid [not null]
+  kind bookmark_kind [not null, default: 'FAVORITE', note: 'FAVORITE o FOLLOW']
+  created_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    (user_id, campaign_id, kind) [unique]
+  }
+}
+
+// ==============================================================================
+// 7. RELACIONES (DEFINIDAS DE FORMA LIMPIA PARA EVITAR CRUCES VISUALES)
+// ==============================================================================
+
+// --- Organizaciones ---
+Ref: organization_members.organization_id > organizations.id [delete: cascade]
+Ref: organization_members.user_id > users.id [delete: cascade]
+Ref: password_reset_tokens.user_id > users.id [delete: cascade]
+
+// --- Campañas y Wizard ---
+Ref: campaigns.owner_user_id > users.id
+Ref: campaigns.organization_id > organizations.id
+Ref: campaign_media.campaign_id > campaigns.id [delete: cascade]
+Ref: campaign_budgets.campaign_id > campaigns.id [delete: cascade]
+Ref: campaign_activities.campaign_id > campaigns.id [delete: cascade]
+Ref: campaign_risks.campaign_id > campaigns.id [delete: cascade]
+Ref: campaign_rewards.campaign_id > campaigns.id [delete: cascade]
+Ref: campaign_impacts.campaign_id > campaigns.id [delete: cascade]
+
+// --- Auditoría / Reviewer ---
+Ref: campaign_reviews.campaign_id > campaigns.id [delete: cascade]
+Ref: campaign_reviews.reviewer_user_id > users.id
+Ref: campaign_review_observations.review_id > campaign_reviews.id [delete: cascade]
+
+// --- Aportes y Finanzas ---
+Ref: contributions.campaign_id > campaigns.id
+Ref: contributions.sponsor_user_id > users.id
+Ref: contributions.reward_id > campaign_rewards.id
+Ref: reward_fulfillments.contribution_id - contributions.id [delete: cascade]
+Ref: refunds.contribution_id > contributions.id
+Ref: refunds.requested_by_user_id > users.id
+Ref: refunds.approved_by_user_id > users.id
+
+// --- Desembolsos y Cuentas Bancarias ---
+Ref: payout_accounts.user_id > users.id
+Ref: payout_accounts.organization_id > organizations.id
+Ref: payout_accounts.verified_by_user_id > users.id
+Ref: disbursements.campaign_id > campaigns.id
+Ref: disbursements.payout_account_id > payout_accounts.id
+Ref: disbursements.requested_by_user_id > users.id
+Ref: disbursements.reviewed_by_user_id > users.id
+Ref: payment_reconciliations.contribution_id > contributions.id
+Ref: payment_reconciliations.resolved_by_user_id > users.id
+
+// --- Rendición y Transparencia ---
+Ref: campaign_updates.campaign_id > campaigns.id [delete: cascade]
+Ref: campaign_updates.author_user_id > users.id
+Ref: evidences.campaign_id > campaigns.id [delete: cascade]
+Ref: accountability_reports.campaign_id > campaigns.id [delete: cascade]
+Ref: accountability_expenses.report_id > accountability_reports.id [delete: cascade]
+Ref: accountability_expenses.budget_item_id > campaign_budgets.id
+
+// --- Soporte y Favoritos ---
+Ref: disputes.campaign_id > campaigns.id
+Ref: disputes.reporter_user_id > users.id
+Ref: disputes.contribution_id > contributions.id
+Ref: disputes.assigned_to_user_id > users.id
+Ref: dispute_messages.dispute_id > disputes.id [delete: cascade]
+Ref: dispute_messages.author_user_id > users.id
+Ref: campaign_bookmarks.user_id > users.id [delete: cascade]
+Ref: campaign_bookmarks.campaign_id > campaigns.id [delete: cascade]
+
+// ==============================================================================
+// 8. AGRUPACIONES VISUALES CON COLORES (TABLE GROUPS)
+// ==============================================================================
+
+TableGroup "01. Identidad y Usuarios" [color: #3B82F6] {
+  users
+  organizations
+  organization_members
+  password_reset_tokens
+}
+
+TableGroup "02. Campañas y Wizard" [color: #10B981] {
+  campaigns
+  campaign_media
+  campaign_budgets
+  campaign_activities
+  campaign_risks
+  campaign_rewards
+  campaign_impacts
+}
+
+TableGroup "03. Auditoría y Revisión" [color: #8B5CF6] {
+  campaign_reviews
+  campaign_review_observations
+}
+
+TableGroup "04. Finanzas y Aportes" [color: #F59E0B] {
+  contributions
+  reward_fulfillments
+  refunds
+  payout_accounts
+  disbursements
+  payment_reconciliations
+}
+
+TableGroup "05. Rendición y Avances" [color: #06B6D4] {
+  campaign_updates
+  evidences
+  accountability_reports
+  accountability_expenses
+}
+
+TableGroup "06. Soporte y Favoritos" [color: #EF4444] {
+  disputes
+  dispute_messages
+  campaign_bookmarks
+}

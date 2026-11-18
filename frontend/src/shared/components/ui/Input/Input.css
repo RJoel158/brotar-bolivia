@@ -1,0 +1,63 @@
+.brotar-input {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.brotar-input__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--brotar-text);
+}
+
+.brotar-input__required {
+  color: var(--brotar-error);
+}
+
+.brotar-input__control {
+  width: 100%;
+  height: var(--control-height);
+  padding: 0 14px;
+  border: 1px solid var(--brotar-border);
+  border-radius: var(--radius-md);
+  background: var(--brotar-surface);
+  color: var(--brotar-text);
+  font-family: inherit;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.brotar-input__control::placeholder {
+  color: var(--brotar-text-secondary);
+}
+
+.brotar-input__control:focus {
+  border-color: var(--brotar-green-institutional);
+  box-shadow: 0 0 0 3px rgba(14, 75, 52, 0.15);
+}
+
+.brotar-input__control:disabled {
+  background: var(--brotar-green-tint);
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.brotar-input--error .brotar-input__control {
+  border-color: var(--brotar-error);
+}
+
+.brotar-input--error .brotar-input__control:focus {
+  box-shadow: 0 0 0 3px rgba(196, 54, 46, 0.15);
+}
+
+.brotar-input__helper {
+  font-size: 0.8rem;
+  color: var(--brotar-text-secondary);
+}
+
+.brotar-input__error {
+  font-size: 0.8rem;
+  color: var(--brotar-error);
+}

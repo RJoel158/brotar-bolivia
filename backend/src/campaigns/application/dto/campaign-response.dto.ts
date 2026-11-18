@@ -1,0 +1,32 @@
+export interface CampaignResponseDto {
+  id: string;
+  ownerUserId: string;
+  organizationId: string | null;
+  category: string;
+  title: string;
+  slug: string;
+  location: string | null;
+  shortSummary: string | null;
+  coverImageUrl: string | null;
+  campaignType: string;
+  fundingModel: string;
+  goalAmount: number;
+  currentAmount: number;
+  currency: string;
+  startDate: string | null;
+  endDate: string | null;
+  status: string;
+  problem: string | null;
+  solution: string | null;
+  beneficiaries: string | null;
+  expectedImpact: string | null;
+  impactIndicators: string | null;
+  reviewNotes: string | null;
+  reviewRejectionReason: string | null;
+  creatorName?: string | null;
+  organizationName?: string | null;
+  progressPercentage: number;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string | null;
+}

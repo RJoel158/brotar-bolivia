@@ -1,0 +1,344 @@
+/* Organization Social Links Card & Forms */
+.brotar-org-social-card {
+  background: #f7faf8;
+  border: 1px solid #dce5df;
+  border-radius: 14px;
+  padding: 1.15rem;
+  transition: border-color 0.18s ease;
+}
+
+.brotar-org-social-card:hover {
+  border-color: #c0d8c8;
+}
+
+.brotar-org-social-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.brotar-org-social-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.brotar-org-social-icon {
+  color: var(--brotar-green-institutional, #0e4b34);
+}
+
+.brotar-org-social-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--brotar-green-institutional, #0e4b34);
+  margin: 0;
+}
+
+.brotar-org-social-edit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #ffffff;
+  border: 1px solid #dce5df;
+  color: #0e4b34;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.65rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.brotar-org-social-edit-btn:hover {
+  background: #eef7f0;
+  border-color: #8cc63f;
+}
+
+/* Edit Mode Form */
+.brotar-org-social-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.brotar-org-social-hint {
+  font-size: 0.8rem;
+  color: #5a6b62;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.brotar-org-social-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.brotar-org-social-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.brotar-org-social-field-label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #2c3e34;
+}
+
+.brotar-org-social-input {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #dce5df;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  background: #ffffff;
+  color: #1a2e22;
+  transition: all 0.18s ease;
+}
+
+.brotar-org-social-input:focus {
+  outline: none;
+  border-color: #17913f;
+  box-shadow: 0 0 0 3px rgba(23, 145, 63, 0.12);
+}
+
+.brotar-org-social-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 0.45rem;
+}
+
+.brotar-org-social-save-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--brotar-green-institutional, #0e4b34);
+  color: #ffffff;
+  border: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.5rem 0.95rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.brotar-org-social-save-btn:hover:not(:disabled) {
+  background: var(--brotar-green-vibrant, #17913f);
+}
+
+.brotar-org-social-save-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.brotar-org-social-cancel-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  color: #64748b;
+  border: 1px solid transparent;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.brotar-org-social-cancel-btn:hover {
+  background: #eef2f0;
+  color: #1e293b;
+}
+
+/* Read Mode Pills */
+.brotar-org-social-pills-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.brotar-org-social-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.brotar-org-social-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.85rem;
+  background: #ffffff;
+  border: 1px solid #dce5df;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #1f2937;
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: all 0.18s ease;
+}
+
+.brotar-org-social-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+.brotar-org-social-pill-ext {
+  color: #94a3b8;
+  transition: color 0.15s ease;
+}
+
+.brotar-org-social-pill:hover .brotar-org-social-pill-ext {
+  color: #475569;
+}
+
+/* Individual Brand Highlights */
+.brotar-org-social-pill--whatsapp {
+  border-color: #c9eed4;
+  background: #f6fdf8;
+}
+.brotar-org-social-pill--whatsapp:hover {
+  border-color: #25d366;
+  background: #edfbf2;
+}
+
+.brotar-org-social-pill--instagram {
+  border-color: #fbd6de;
+  background: #fef7f8;
+}
+.brotar-org-social-pill--instagram:hover {
+  border-color: #e4405f;
+  background: #fdf0f3;
+}
+
+.brotar-org-social-pill--facebook {
+  border-color: #cfe1fa;
+  background: #f6f9fe;
+}
+.brotar-org-social-pill--facebook:hover {
+  border-color: #1877f2;
+  background: #eff5fd;
+}
+
+.brotar-org-social-pill--youtube {
+  border-color: #fcced3;
+  background: #fff8f8;
+}
+.brotar-org-social-pill--youtube:hover {
+  border-color: #ff0000;
+  background: #feeeee;
+}
+
+.brotar-org-social-pill--tiktok {
+  border-color: #e2e8f0;
+  background: #f8fafc;
+}
+.brotar-org-social-pill--tiktok:hover {
+  border-color: #0f172a;
+  background: #f1f5f9;
+}
+
+/* Empty State */
+.brotar-org-social-empty {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: #ffffff;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px dashed #cbd5e1;
+}
+
+.brotar-org-social-empty p {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.brotar-org-social-add-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #f1f8f3;
+  border: 1px solid #bce1c9;
+  color: #0e4b34;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.65rem;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.brotar-org-social-add-link-btn:hover {
+  background: #0e4b34;
+  color: #ffffff;
+}
+
+@media (max-width: 580px) {
+  .brotar-org-social-empty {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Mini Social Row for Org Cards */
+.brotar-org-mini-social-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.65rem;
+}
+
+.brotar-org-mini-social-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: #ffffff;
+  border: 1px solid #dce5df;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.brotar-org-mini-social-btn:hover {
+  transform: translateY(-1.5px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.brotar-org-mini-social-btn--whatsapp:hover {
+  border-color: #25d366;
+  background: #f6fdf8;
+}
+
+.brotar-org-mini-social-btn--instagram:hover {
+  border-color: #e4405f;
+  background: #fef7f8;
+}
+
+.brotar-org-mini-social-btn--facebook:hover {
+  border-color: #1877f2;
+  background: #f6f9fe;
+}
+
+.brotar-org-mini-social-btn--youtube:hover {
+  border-color: #ff0000;
+  background: #fff8f8;
+}
+
+.brotar-org-mini-social-btn--tiktok:hover {
+  border-color: #0f172a;
+  background: #f8fafc;
+}
+

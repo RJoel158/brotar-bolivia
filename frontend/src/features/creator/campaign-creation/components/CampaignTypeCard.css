@@ -1,0 +1,66 @@
+.campaign-type-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  padding: 14px 16px;
+  background: var(--brotar-surface);
+  border: 1px solid var(--brotar-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.campaign-type-card:hover {
+  border-color: var(--brotar-green-institutional);
+}
+
+.campaign-type-card:focus-visible {
+  outline: 2px solid var(--brotar-green-institutional);
+  outline-offset: 2px;
+}
+
+.campaign-type-card.is-selected {
+  border-color: var(--brotar-green-institutional);
+  background: var(--brotar-green-tint);
+}
+
+.campaign-type-card__mark {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;
+  border: 1.5px solid var(--brotar-border);
+  border-radius: 50%;
+  background: var(--brotar-surface);
+  box-sizing: border-box;
+}
+
+.campaign-type-card.is-selected .campaign-type-card__mark {
+  border-color: var(--brotar-green-institutional);
+  box-shadow: inset 0 0 0 4px var(--brotar-green-institutional);
+}
+
+.campaign-type-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.campaign-type-card__title {
+  font-size: 0.95rem;
+  font-weight: 650;
+  color: var(--brotar-text);
+}
+
+.campaign-type-card.is-selected .campaign-type-card__title {
+  color: var(--brotar-green-institutional);
+}
+
+.campaign-type-card__description {
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--brotar-text-secondary);
+}

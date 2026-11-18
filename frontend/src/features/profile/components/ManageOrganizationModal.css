@@ -1,0 +1,384 @@
+.brotar-manage-org-modal {
+  max-width: 620px;
+  width: 100%;
+}
+
+.brotar-manage-org-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-height: 68vh;
+  overflow-y: auto;
+}
+
+/* Modal Footer */
+.brotar-manage-org-modal .brotar-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid #eef2f0;
+  background: #ffffff;
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
+}
+
+/* Invite Box */
+.brotar-invite-box {
+  background: #f7faf8;
+  border: 1px solid #dce5df;
+  border-radius: 14px;
+  padding: 1.1rem;
+}
+
+.brotar-invite-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.brotar-invite-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0e4b34;
+  margin: 0;
+}
+
+.brotar-invite-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #17913f;
+  background: rgba(23, 145, 63, 0.12);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+.brotar-invite-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.brotar-invite-code-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #ffffff;
+  border: 1.5px dashed #0e4b34;
+  border-radius: 10px;
+  padding: 0.45rem 0.85rem;
+}
+
+.brotar-code-val {
+  font-family: monospace;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #0e4b34;
+  letter-spacing: 0.08em;
+}
+
+.brotar-copy-icon-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.brotar-copy-icon-btn:hover {
+  background: #f1f5f2;
+  color: #0e4b34;
+}
+
+.brotar-copy-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #ffffff;
+  border: 1px solid #dce5df;
+  color: #0e4b34;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.55rem 0.95rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.brotar-copy-link-btn:hover {
+  background: #eef7f0;
+  border-color: #8cc63f;
+}
+
+/* Members Section */
+.brotar-members-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.brotar-members-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brotar-members-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.brotar-members-icon {
+  color: #17913f;
+}
+
+.brotar-members-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.brotar-members-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.brotar-member-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.95rem;
+  background: #ffffff;
+  border: 1px solid #eef2f0;
+  border-radius: 12px;
+  transition: all 0.15s ease;
+}
+
+.brotar-member-row:hover {
+  background: #f8faf9;
+  border-color: #dce5df;
+}
+
+.brotar-member-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #eef7f0;
+  color: #0e4b34;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #8cc63f;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.brotar-member-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.brotar-member-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.brotar-member-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.brotar-member-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.brotar-you-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #17913f;
+  background: rgba(23, 145, 63, 0.12);
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+}
+
+.brotar-member-email {
+  font-size: 0.76rem;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.brotar-member-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+/* Role Selector Wrap */
+.brotar-role-select-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.brotar-role-select {
+  border: 1.5px solid #dce5df;
+  border-radius: 8px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0e4b34;
+  background: #ffffff;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.brotar-role-select:hover:not(:disabled) {
+  border-color: #17913f;
+  background: #f7faf8;
+}
+
+.brotar-role-select:focus {
+  border-color: #17913f;
+  box-shadow: 0 0 0 2px rgba(23, 145, 63, 0.15);
+}
+
+.brotar-role-select:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.brotar-role-spin {
+  position: absolute;
+  right: -20px;
+  color: #0e4b34;
+}
+
+/* Role Tags */
+.brotar-role-tag {
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+}
+
+.role-owner {
+  background: #0e4b34;
+  color: #ffffff;
+}
+
+.role-admin {
+  background: #eef7f0;
+  color: #0e4b34;
+  border: 1px solid rgba(14, 75, 52, 0.2);
+}
+
+.role-creator {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+
+.role-collaborator,
+.role-member {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.brotar-member-remove-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0.35rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.brotar-member-remove-btn:hover:not(:disabled) {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.brotar-member-remove-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Inline Removal Confirmation */
+.brotar-member-confirm-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  padding: 3px 8px;
+  border-radius: 8px;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.brotar-confirm-text {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #991b1b;
+}
+
+.brotar-confirm-btn-yes {
+  background: #dc2626;
+  color: #ffffff;
+  border: none;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.brotar-confirm-btn-yes:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+.brotar-confirm-btn-no {
+  background: #ffffff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.brotar-confirm-btn-no:hover:not(:disabled) {
+  background: #f1f5f9;
+}

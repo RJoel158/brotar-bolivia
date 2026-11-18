@@ -1,0 +1,166 @@
+.brotar-forbidden-page {
+  min-height: calc(100vh - 140px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.25rem;
+  background: radial-gradient(circle at 50% 20%, rgba(14, 75, 52, 0.08) 0%, rgba(247, 250, 248, 1) 70%);
+}
+
+.brotar-forbidden-card {
+  max-width: 620px;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #dce5df;
+  border-radius: 20px;
+  box-shadow: 0 12px 36px rgba(14, 75, 52, 0.06);
+  padding: 3rem 2.25rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.brotar-forbidden-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #b91c1c 0%, #d97706 50%, #0e4b34 100%);
+}
+
+.brotar-forbidden-mascot-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1.5rem;
+}
+
+.brotar-forbidden-badge {
+  position: absolute;
+  top: 0px;
+  right: -12px;
+  background: #b91c1c;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3);
+  border: 2px solid #ffffff;
+}
+
+.brotar-forbidden-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.brotar-forbidden-eyebrow {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #b91c1c;
+  background: rgba(185, 28, 28, 0.1);
+  padding: 0.3rem 0.85rem;
+  border-radius: 999px;
+  margin-bottom: 0.85rem;
+}
+
+.brotar-forbidden-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #0e4b34;
+  line-height: 1.25;
+  margin: 0 0 1rem 0;
+  font-family: inherit;
+}
+
+.brotar-forbidden-description {
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: #4b5563;
+  max-width: 480px;
+  margin: 0 auto 2rem auto;
+}
+
+.brotar-forbidden-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.brotar-forbidden-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 0.75rem 1.35rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-decoration: none;
+  border: none;
+}
+
+.brotar-forbidden-btn-primary {
+  background: #0e4b34;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(14, 75, 52, 0.2);
+}
+
+.brotar-forbidden-btn-primary:hover {
+  background: #17913f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(23, 145, 63, 0.28);
+}
+
+.brotar-forbidden-btn-secondary {
+  background: #f1f5f2;
+  color: #0e4b34;
+  border: 1px solid #dce5df;
+}
+
+.brotar-forbidden-btn-secondary:hover {
+  background: #e5ece7;
+  color: #0e4b34;
+  border-color: #8cc63f;
+}
+
+.brotar-forbidden-btn-ghost {
+  background: transparent;
+  color: #6b7280;
+}
+
+.brotar-forbidden-btn-ghost:hover {
+  background: #f7faf8;
+  color: #0e4b34;
+}
+
+@media (max-width: 640px) {
+  .brotar-forbidden-card {
+    padding: 2.25rem 1.25rem;
+  }
+
+  .brotar-forbidden-title {
+    font-size: 1.5rem;
+  }
+
+  .brotar-forbidden-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .brotar-forbidden-btn {
+    width: 100%;
+  }
+}

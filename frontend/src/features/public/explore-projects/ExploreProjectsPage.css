@@ -1,0 +1,821 @@
+/* ==============================================================================
+   BROTAR - EXPLORE PROJECTS (MOBILE FIRST RESPONSIVE)
+   ============================================================================== */
+
+.brotar-explore-root {
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--brotar-page-bg, #f7faf8);
+  color: var(--brotar-text, #14201a);
+  padding-bottom: 90px;
+  box-sizing: border-box;
+}
+
+.brotar-explore-layout {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 1024px) {
+  .brotar-explore-layout {
+    display: grid;
+    grid-template-columns: 1fr 290px;
+    gap: 2rem;
+    padding: 2rem 1.5rem;
+  }
+}
+
+.brotar-explore-main {
+  width: 100%;
+  min-width: 0;
+}
+
+/* ==============================================================================
+   1. HERO BANNER CARD
+   ============================================================================== */
+.brotar-hero-banner {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  background-color: var(--brotar-green-institutional, #0e4b34);
+  padding: 1.75rem 1.25rem;
+  color: #ffffff;
+  box-shadow: 0 12px 32px rgba(14, 75, 52, 0.12);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .brotar-hero-banner {
+    border-radius: 24px;
+    padding: 2.75rem 2.5rem;
+  }
+}
+
+.brotar-hero-banner__ring-1 {
+  position: absolute;
+  top: -60px;
+  right: -50px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 32px solid rgba(23, 145, 63, 0.25);
+  pointer-events: none;
+}
+
+.brotar-hero-banner__ring-2 {
+  position: absolute;
+  bottom: -70px;
+  right: 50px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 22px solid rgba(140, 198, 63, 0.15);
+  pointer-events: none;
+}
+
+.brotar-hero-banner__content {
+  position: relative;
+  max-width: 580px;
+  z-index: 2;
+}
+
+.brotar-hero-banner__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.8rem;
+  background: rgba(167, 243, 208, 0.15);
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #a7f3d0;
+  margin-bottom: 1rem;
+}
+
+.brotar-hero-banner__title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  color: #ffffff;
+  margin: 0 0 0.85rem 0;
+}
+
+@media (min-width: 640px) {
+  .brotar-hero-banner__title {
+    font-size: 2.75rem;
+  }
+}
+
+.brotar-hero-banner__title--highlight {
+  color: var(--brotar-green-lime, #8cc63f);
+}
+
+.brotar-hero-banner__desc {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #d8eee0;
+  max-width: 440px;
+  margin: 0 0 1.5rem 0;
+}
+
+.brotar-hero-banner__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.7rem 1.3rem;
+  border-radius: 9999px;
+  background-color: var(--brotar-green-lime, #8cc63f);
+  color: var(--brotar-green-institutional, #0e4b34);
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.brotar-hero-banner__cta:hover {
+  transform: scale(1.02);
+  background-color: #9bd44e;
+}
+
+/* ==============================================================================
+   2. DISCOVER SECTION
+   ============================================================================== */
+.brotar-discover-section {
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+.brotar-discover-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.brotar-discover-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--brotar-green-action, #17913f);
+  margin: 0 0 0.2rem 0;
+}
+
+.brotar-discover-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  color: var(--brotar-text, #14201a);
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  .brotar-discover-title {
+    font-size: 1.6rem;
+  }
+}
+
+.brotar-discover-view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: transparent;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--brotar-green-action, #17913f);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.brotar-discover-view-all:hover {
+  color: var(--brotar-green-institutional, #0e4b34);
+}
+
+/* Active search query chip */
+.brotar-active-search-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--brotar-green-tint, #e9f4ec);
+  border: 1px solid #d1e7d8;
+  color: var(--brotar-green-institutional, #0e4b34);
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  margin-bottom: 0.85rem;
+}
+
+.brotar-search-chip-close {
+  background: transparent;
+  border: none;
+  color: var(--brotar-green-action, #17913f);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+/* Category Pills Strip */
+.brotar-category-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.25rem 0 1rem;
+  margin-bottom: 0.5rem;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+}
+
+.brotar-category-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.brotar-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 1.15rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  border: 1px solid var(--brotar-border, #dce5df);
+  background: #ffffff;
+  color: var(--brotar-text-secondary, #5a6b62);
+  transition: all 0.15s ease;
+}
+
+.brotar-pill:hover {
+  border-color: rgba(23, 145, 63, 0.5);
+  color: var(--brotar-text, #14201a);
+}
+
+.brotar-pill--active {
+  background-color: var(--brotar-green-action, #17913f);
+  border-color: var(--brotar-green-action, #17913f);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.brotar-pill--active:hover {
+  background-color: #127933;
+  color: #ffffff;
+}
+
+/* Error Banner */
+.brotar-alert-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #fbeceb;
+  border: 1px solid #c4362e;
+  color: #c4362e;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+
+/* ==============================================================================
+   3. PROJECT CARDS GRID (Oficial Brotar Style)
+   ============================================================================== */
+.brotar-cards-grid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .brotar-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.brotar-project-card {
+  background: #ffffff;
+  border: 1px solid var(--brotar-border, #dce5df);
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 5px 20px rgba(20, 32, 26, 0.035);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  cursor: pointer;
+}
+
+.brotar-project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(20, 32, 26, 0.09);
+  border-color: #a7f3d0;
+}
+
+/* Card Media */
+.brotar-project-card__media {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  background: #0e4b34;
+  overflow: hidden;
+}
+
+.brotar-project-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.brotar-project-card:hover .brotar-project-card__img {
+  transform: scale(1.05);
+}
+
+.brotar-project-card__placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0e4b34 0%, #17913f 100%);
+  color: #ffffff;
+}
+
+.brotar-project-card__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  box-sizing: border-box;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.brotar-project-card__category-badge,
+.brotar-project-card__bookmark {
+  pointer-events: auto;
+}
+
+.brotar-project-card__category-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(4px);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--brotar-green-institutional, #0e4b34);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.brotar-project-card__bookmark {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(4px);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brotar-green-institutional, #0e4b34);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.brotar-project-card__bookmark:hover {
+  transform: scale(1.08);
+  background: #ffffff;
+}
+
+/* Card Body */
+.brotar-project-card__body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.brotar-project-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--brotar-text-secondary, #5a6b62);
+  margin-bottom: 0.5rem;
+}
+
+.brotar-project-card__initials {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--brotar-green-tint, #e9f4ec);
+  color: var(--brotar-green-action, #17913f);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625rem;
+  font-weight: 700;
+}
+
+.brotar-project-card__author {
+  font-weight: 500;
+}
+
+.brotar-project-card__title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  color: var(--brotar-text, #14201a);
+  margin: 0 0 1rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 2.875rem;
+}
+
+.brotar-project-card__funding {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.brotar-funding-amount {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--brotar-green-institutional, #0e4b34);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.brotar-funding-target {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin: 0.15rem 0 0 0;
+}
+
+.brotar-funding-percentage {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--brotar-green-action, #17913f);
+}
+
+.brotar-progress-track {
+  width: 100%;
+  height: 8px;
+  border-radius: 9999px;
+  background-color: var(--brotar-green-tint, #e9f4ec);
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.brotar-progress-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #17913f 0%, #8cc63f 100%);
+  transition: width 0.4s ease;
+}
+
+.brotar-project-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--brotar-border, #dce5df);
+  padding-top: 0.875rem;
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  color: var(--brotar-text-secondary, #5a6b62);
+}
+
+.brotar-footer-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.brotar-card-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  border: none;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--brotar-text-secondary, #5a6b62);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.brotar-card-action-btn:hover {
+  color: var(--brotar-green-action, #17913f);
+}
+
+/* ==============================================================================
+   4. RIGHT SIDEBAR (Desktop)
+   ============================================================================== */
+.brotar-explore-sidebar {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .brotar-explore-sidebar {
+    display: block;
+  }
+}
+
+.brotar-sidebar-sticky {
+  position: sticky;
+  top: 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.brotar-sidebar-card {
+  background: #ffffff;
+  border: 1px solid var(--brotar-border, #dce5df);
+  border-radius: 18px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 12px rgba(20, 32, 26, 0.03);
+}
+
+.brotar-sidebar-card--green {
+  background-color: var(--brotar-green-tint, #e9f4ec);
+  border-color: #d1e7d8;
+}
+
+.brotar-sidebar-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brotar-sidebar-card__title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--brotar-text, #14201a);
+  margin: 0;
+}
+
+.brotar-sidebar-card__icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--brotar-green-tint, #e9f4ec);
+  color: var(--brotar-green-action, #17913f);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brotar-sidebar-card__amount {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--brotar-green-institutional, #0e4b34);
+  margin: 1rem 0 0 0;
+  line-height: 1;
+}
+
+.brotar-sidebar-card__subtext {
+  font-size: 0.8125rem;
+  color: var(--brotar-text-secondary, #5a6b62);
+  margin: 0.25rem 0 1rem 0;
+}
+
+.brotar-sidebar-highlight-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: var(--brotar-green-tint, #e9f4ec);
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.brotar-sidebar-highlight-box__avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--brotar-green-action, #17913f);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.brotar-sidebar-highlight-box__title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--brotar-green-institutional, #0e4b34);
+  margin: 0;
+}
+
+.brotar-sidebar-highlight-box__desc {
+  font-size: 0.6875rem;
+  color: var(--brotar-text-secondary, #5a6b62);
+  margin: 0.15rem 0 0 0;
+}
+
+.brotar-sidebar-link-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  background: transparent;
+  border: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--brotar-green-action, #17913f);
+  white-space: nowrap;
+  cursor: pointer;
+  padding: 0.4rem 0;
+  transition: color 0.15s ease;
+}
+
+.brotar-sidebar-link-btn:hover {
+  color: var(--brotar-green-institutional, #0e4b34);
+}
+
+.brotar-sidebar-card__plus-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--brotar-green-institutional, #0e4b34);
+  color: #a7f3d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.875rem;
+}
+
+.brotar-sidebar-card__cta-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--brotar-text, #14201a);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.brotar-sidebar-card__cta-desc {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--brotar-text-secondary, #5a6b62);
+  margin: 0 0 1rem 0;
+}
+
+.brotar-sidebar-publish-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1.25rem;
+  border-radius: 9999px;
+  background: var(--brotar-green-action, #17913f);
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  white-space: nowrap;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.brotar-sidebar-publish-btn:hover {
+  background: var(--brotar-green-institutional, #0e4b34);
+}
+
+.brotar-sidebar-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.5rem;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.brotar-sidebar-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Skeletons */
+.brotar-skeleton-card {
+  background: #ffffff;
+  border: 1px solid var(--brotar-border, #dce5df);
+  border-radius: 18px;
+  overflow: hidden;
+  height: 360px;
+}
+
+.brotar-skeleton-media {
+  width: 100%;
+  height: 180px;
+  background: #e9f4ec;
+  animation: pulse 1.5s infinite;
+}
+
+.brotar-skeleton-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.brotar-skeleton-line {
+  height: 14px;
+  background: #e9f4ec;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite;
+}
+
+.brotar-skeleton-line.short {
+  width: 35%;
+}
+
+.brotar-skeleton-line.title {
+  width: 85%;
+  height: 20px;
+}
+
+.brotar-skeleton-meter {
+  height: 8px;
+  background: #e9f4ec;
+  border-radius: 9999px;
+  margin-top: 1rem;
+  animation: pulse 1.5s infinite;
+}
+
+.brotar-empty-state {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px dashed var(--brotar-border, #dce5df);
+}
+
+.brotar-empty-state__icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--brotar-green-tint, #e9f4ec);
+  color: var(--brotar-green-action, #17913f);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.brotar-btn-green {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.65rem 1.25rem;
+  border-radius: 9999px;
+  background: var(--brotar-green-action, #17913f);
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

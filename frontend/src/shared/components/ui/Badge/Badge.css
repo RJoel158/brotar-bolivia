@@ -1,0 +1,40 @@
+.brotar-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.brotar-badge--confirmed {
+  color: var(--brotar-success);
+  background: var(--brotar-success-soft);
+}
+
+.brotar-badge--pending {
+  color: var(--brotar-warning);
+  background: var(--brotar-warning-soft);
+}
+
+.brotar-badge--review {
+  color: var(--brotar-review);
+  background: var(--brotar-review-soft);
+}
+
+.brotar-badge--failed {
+  color: var(--brotar-error);
+  background: var(--brotar-error-soft);
+}
+
+.brotar-badge--expired {
+  color: var(--brotar-neutral);
+  background: var(--brotar-neutral-soft);
+}
+
+.brotar-badge--published {
+  color: var(--brotar-green-institutional);
+  background: var(--brotar-green-tint);
+}

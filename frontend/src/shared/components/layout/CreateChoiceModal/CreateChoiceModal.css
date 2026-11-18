@@ -1,0 +1,208 @@
+/* ==============================================================================
+   Create Choice Modal / Action Sheet
+   Bottom sheet on mobile, centered card on desktop
+   ============================================================================== */
+
+.brotar-create-choice-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 10000;
+  animation: choiceFadeIn 0.18s ease forwards;
+  box-sizing: border-box;
+}
+
+@keyframes choiceFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.brotar-create-choice-card {
+  width: 100%;
+  max-width: 480px;
+  background: #18181b;
+  color: #ffffff;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  padding: 20px 18px calc(24px + env(safe-area-inset-bottom, 12px)) 18px;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: choiceSlideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  box-sizing: border-box;
+}
+
+@keyframes choiceSlideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 640px) {
+  .brotar-create-choice-overlay {
+    align-items: center;
+    padding: 16px;
+  }
+
+  .brotar-create-choice-card {
+    border-radius: 20px;
+    padding: 24px 22px;
+    animation: choiceScaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes choiceScaleIn {
+    from {
+      transform: scale(0.94);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+}
+
+/* Header */
+.brotar-create-choice-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brotar-create-choice-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brotar-create-choice-sparkle {
+  color: #8cc63f;
+}
+
+.brotar-create-choice-header h3 {
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.brotar-create-choice-close-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: #a1a1aa;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.brotar-create-choice-close-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+/* Options Stack */
+.brotar-create-choice-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.brotar-create-option-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: #27272a;
+  border: 1px solid #3f3f46;
+  border-radius: 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.18s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.brotar-create-option-card:hover {
+  background: #323238;
+  border-color: #17913f;
+  transform: translateY(-2px);
+}
+
+.brotar-create-option-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.18s ease;
+}
+
+.brotar-create-option-card:hover .brotar-create-option-icon-box {
+  transform: scale(1.08);
+}
+
+.brotar-create-option-icon-box.is-green {
+  background: rgba(23, 145, 63, 0.2);
+  color: #8cc63f;
+  border: 1px solid rgba(140, 198, 63, 0.35);
+}
+
+.brotar-create-option-icon-box.is-institutional {
+  background: rgba(14, 75, 52, 0.4);
+  color: #8cc63f;
+  border: 1px solid rgba(23, 145, 63, 0.4);
+}
+
+.brotar-create-option-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.brotar-create-option-content h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.brotar-create-option-content p {
+  font-size: 0.78rem;
+  color: #a1a1aa;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.brotar-create-option-arrow {
+  color: #71717a;
+  transition: transform 0.18s ease, color 0.18s ease;
+  flex-shrink: 0;
+}
+
+.brotar-create-option-card:hover .brotar-create-option-arrow {
+  transform: translateX(3px);
+  color: #8cc63f;
+}
